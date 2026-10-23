@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fitness Flow – zacznij dziś, nie jutro</title>
+<meta name="description" content="Zacznij dziś, nie jutro. Aplikacja na Androida, która pomaga zbudować nawyk ruchu: jedno łagodne ćwiczenie dziennie, plan kalisteniki, minutnik i drużyna ze znajomymi. Start today, not tomorrow – an Android app that helps you build an exercise habit.">
+<meta property="og:title" content="Fitness Flow – zacznij dziś, nie jutro / start today, not tomorrow">
+<meta property="og:description" content="Zacznij od jednego ćwiczenia dziennie. Plan, minutnik, przerwy i postępy, a znajomi ćwiczą razem z Tobą.">
+<meta property="og:image" content="https://cjxpl.github.io/fitnessflow-releases/img/bench.jpg">
+<link rel="alternate" hreflang="pl" href="https://cjxpl.github.io/fitnessflow-releases/?lang=pl">
+<link rel="alternate" hreflang="en" href="https://cjxpl.github.io/fitnessflow-releases/?lang=en">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0A0B0A">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0B0A}
+a{color:#E9EDE6}a:hover{color:#FFFFFF}
+button{font-family:inherit;cursor:pointer}
+img{display:block}
+.ff-grain{background-image:url(img/grain.png);background-size:220px 220px}
+@keyframes ffGrain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-6%,-2%)}80%{transform:translate(5%,4%)}100%{transform:translate(0,0)}}
+.ff-grain-run{animation:ffGrain .9s steps(5) infinite}
+@keyframes ffMarq{to{transform:translateX(-50%)}}
+.ff-marq{animation:ffMarq 30s linear infinite}
+@keyframes ffReveal{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+.ff-reveal{animation:ffReveal 1.4s cubic-bezier(.77,0,.18,1) both}
+@keyframes ffKen{from{transform:scale(1.18)}to{transform:scale(1.04)}}
+.ff-ken{animation:ffKen 3.2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes ffUp{from{transform:translateY(105%)}to{transform:translateY(0)}}
+.ff-up{display:block;animation:ffUp 1s cubic-bezier(.77,0,.18,1) both}
+.ff-d1{animation-delay:.35s}.ff-d2{animation-delay:.5s}.ff-d3{animation-delay:.65s}
+@keyframes ffStrike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.ff-strike{transform-origin:0 50%;animation:ffStrike .7s cubic-bezier(.77,0,.18,1) 1.7s both}
+@keyframes ffFade{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.ff-fade{animation:ffFade .9s cubic-bezier(.2,.8,.2,1) 1s both}
+@keyframes ffChip{from{opacity:0;transform:translateY(40px) scale(.94)}to{opacity:1;transform:none}}
+.ff-chip{animation:ffChip .9s cubic-bezier(.3,1.4,.5,1) 1.5s both}
+@keyframes ffBlink{50%{opacity:.25}}
+.ff-live{animation:ffBlink 1.1s ease-in-out infinite}
+@keyframes ffBumpA{0%{transform:scale(1)}35%{transform:scale(1.28) rotate(-3deg)}100%{transform:scale(1)}}
+@keyframes ffBumpB{0%{transform:scale(1)}35%{transform:scale(1.28) rotate(3deg)}100%{transform:scale(1)}}
+.bA{animation:ffBumpA .4s cubic-bezier(.3,1.6,.5,1)}
+.bB{animation:ffBumpB .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes ffHit{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.ff-hit{animation:ffHit .7s ease-in-out infinite}
+.ff-btn{transition:transform .25s cubic-bezier(.3,1.6,.5,1),background-color .25s,color .25s}
+.ff-btn:hover{transform:translateY(-3px)}
+.ff-btn:active{transform:scale(.95)}
+.ff-btn .ff-arr{transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.ff-btn:hover .ff-arr{transform:translateX(5px)}
+.ff-pic{overflow:hidden}
+.ff-pic img{transition:transform 1.1s cubic-bezier(.2,.8,.2,1),filter .8s}
+.ff-pic:hover img{transform:scale(1.07)}
+.ff-mono img{filter:grayscale(.85) contrast(1.1)}
+.ff-mono:hover img{filter:grayscale(0) contrast(1.05)}
+.ff-row{transition:top .7s cubic-bezier(.3,1.35,.5,1)}
+.ff-bar{transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.ff-ring{transition:stroke-dashoffset .35s linear,stroke .3s}
+.ff-dbar{transition:width 1s linear}
+.ff-block{transition:background-color .35s ease,transform .35s cubic-bezier(.3,1.6,.5,1)}
+.ff-step{transition:height .6s cubic-bezier(.3,1.4,.5,1),background-color .4s}
+.ff-lang{transition:color .25s,border-color .25s}
+@keyframes ffToast{0%{transform:translate(-50%,24px);opacity:0}12%,85%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-10px);opacity:0}}
+.ff-toast{animation:ffToast 2.6s ease both}
+.ff-prog{transform:scaleX(0);transform-origin:0 50%}
+@keyframes ffGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ffRv{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:none}}
+@keyframes ffWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes ffZoomOut{from{transform:scale(1.35)}to{transform:scale(1)}}
+@keyframes ffPx{from{transform:translateY(-8%) scale(1.15)}to{transform:translateY(8%) scale(1.15)}}
+@keyframes ffTrack{from{transform:translateX(8%)}to{transform:translateX(-38%)}}
+@keyframes ffLeft{from{transform:translateX(-18%)}to{transform:translateX(6%)}}
+@keyframes ffRight{from{transform:translateX(14%)}to{transform:translateX(-8%)}}
+@supports (animation-timeline: view()){
+.ff-rv{animation:ffRv linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
+.ff-wipe{animation:ffWipe linear both;animation-timeline:view();animation-range:entry 10% cover 40%}
+.ff-zoom{animation:ffZoomOut linear both;animation-timeline:view();animation-range:entry 0% cover 60%}
+.ff-px{animation:ffPx linear both;animation-timeline:view()}
+.ff-track{animation:ffTrack linear both;animation-timeline:view()}
+.ff-left{animation:ffLeft linear both;animation-timeline:view()}
+.ff-right{animation:ffRight linear both;animation-timeline:view()}
+.ff-prog{animation:ffGrow linear both;animation-timeline:scroll(root)}
+}
+@media (max-width: 640px){.ff-navl{display:none}}
+@media (max-width: 430px){.ff-brandtxt{display:none}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+<style>html{scroll-behavior:smooth}#app{min-height:100vh}</style>
+</head>
+<body>
+<div id="app"></div>
+<noscript><p style="color:#fff;font-family:sans-serif;padding:24px">Fitness Flow – <a href="https://github.com/CjxPL/fitnessflow-releases/releases/latest">pobierz aplikację na Androida / get the Android app</a>.</p></noscript>
+<script type="module">
+import { html, render, Component } from './vendor/preact-htm.js';
+
+var FF_REL = 'https://github.com/CjxPL/fitnessflow-releases/releases/latest';
+var FF_API = 'https://api.github.com/repos/CjxPL/fitnessflow-releases/releases/latest';
+var FF_TARGET = 18;
+var FF_REST = 150;
+var FF_C = 703.72;
+
+var FF_T = {
+  pl: {
+    title: 'Fitness Flow – zacznij dziś, nie jutro',
+    navTry: 'Spróbuj', navPlans: 'Plany', navTeam: 'Drużyna', navDl: 'Pobierz',
+    badge: 'Wczesna wersja · Android',
+    h1a: 'Zacznij', h1b: 'dziś.', h1c: 'Nie', h1d: 'jutro.',
+    heroP: 'Na start jedno łagodne ćwiczenie dziennie. Fitness Flow prowadzi Cię dalej: plan, minutnik, przerwy i postępy. A znajomi ćwiczą razem z Tobą.',
+    heroAlt: 'Kobieta siedzi na ławce na wzgórzu i patrzy na zachód słońca nad górami',
+    ctaDl: 'Pobierz na Androida', ctaTry: 'Spróbuj na żywo',
+    stat1: 'ćwiczenie dziennie na start', stat2: 'części każdego treningu', stat3: 'tygodni w bloku celów',
+    chipToday: 'Dziś', chipLeft: 'Do końca dnia zostało', chipGoal: 'Cel na dziś', chipGoalV: '1 łagodne ćwiczenie',
+    marq: ['Pajacyki', 'Podciąganie', 'Pompki', 'Front lever', 'Planche', 'Muscle-up', 'L-sit', 'Stanie na rękach', 'Bieg'],
+    runAlt: 'Biegacz na mokrej drodze o świcie', big1: 'Codziennie.', big2: 'Po trochu.',
+    s1h: 'Zbuduj nawyk', s1p: 'Bez ankiet na start. Pierwszy cel to jedno łagodne ćwiczenie dziennie, a o resztę aplikacja zapyta dopiero wtedy, gdy będzie to miało sens.',
+    s2h: 'Ćwicz z prowadzeniem', s2p: 'Rozgrzewka, część główna, schłodzenie. Jeden przycisk zaczyna serię, minutnik prowadzi, a o wynik pytamy dopiero po niej.',
+    s3h: 'Idź krok dalej', s3p: 'Dajesz radę? Cel rośnie o powtórzenie albo dwie sekundy. Za ciężko? Plan sam się cofa.',
+    tryH1: 'Spróbuj', tryH2: 'na żywo.', tryP: 'Naciśnij Start i utrzymaj pozycję albo odhaczaj powtórzenia. Działa dokładnie tak, jak seria w aplikacji.',
+    calmAlt: 'Kobieta w pozycji medytacyjnej na tarasie o zachodzie słońca', calmTag: 'Utrzymania', calmH1: 'Liczy w górę.', calmH2: 'Wibruje przy celu.',
+    tHead: 'Planche lean · cel 18 s',
+    lReady: 'Gotowy?', lHold: 'Utrzymujesz', lRes: 'Twój wynik', lRest: 'Przerwa',
+    sGoal: 'Cel: 18 s', sBeat: 'Cel pobity! Trzymaj dalej', sFix: 'Popraw, jeśli trzeba', sNext: 'Następna seria za chwilę',
+    bStart: 'Start', bStop: 'Puściłem', bSave: 'Zapisz i przerwa', bSkip: 'Pomiń przerwę', bMinus: 'Odejmij sekundę', bPlus: 'Dodaj sekundę',
+    rHead: 'Pompki · 8 powtórzeń', rOf: 'z 8 powtórzeń', rDone: 'Seria zaliczona!', rBtn: 'Zrobione +1', rAgain: 'Jeszcze jedna seria',
+    matAlt: 'Kobieta rozciąga się na macie przed laptopem z filmem instruktażowym', matTag: 'Powtórzenia', matH1: 'Cel i jeden', matH2: 'duży przycisk.',
+    wAria: 'Gdzie trenować', wH1: 'Trenuj tam,', wH2: 'gdzie jesteś.',
+    trailAlt: 'Sylwetka biegaczki na skałach o zachodzie słońca', stretchAlt: 'Kobieta w wykroku rozciąga biodra na macie w mieszkaniu', yogaAlt: 'Kobieta siedzi po turecku na macie i spokojnie oddycha',
+    cap1: '01 · W terenie', cap2: '02 · W domu', cap3: '03 · Na wyciszenie',
+    pH1: 'Plan,', pH2: 'nie na oko.',
+    pP: 'Wybierz cel i poziom. To dokładnie te liczby, które ułoży aplikacja, na podstawie zaleceń Amerykańskiego Kolegium Medycyny Sportowej (ACSM, 2026) i przeglądów badań.',
+    goalAria: 'Cel', levelAria: 'Poziom', restLbl: 'Przerwa',
+    levels: ['Początkujący', 'Średni', 'Zaawansowany'],
+    goals: {
+      masa: { label: 'Masa', repsLabel: 'Powtórzenia', reps: '8–15', repsNote: 'z obciążeniem 6–10', rest: '2 min', restNote: 'z obciążeniem 2,5 min', effortLabel: 'Zapas', effort: '1–3', effortNote: 'powtórzenia w zapasie, bez upadku', setsLabel: 'serii na partię mięśni w tygodniu' },
+      wyt: { label: 'Wytrzymałość', repsLabel: 'Powtórzenia', reps: '15–25', repsNote: 'utrzymania 30–60 s', rest: '45–60 s', restNote: 'krótkie przerwy', effortLabel: 'Zapas', effort: '2–4', effortNote: 'powtórzenia w zapasie', setsLabel: 'serii na partię mięśni w tygodniu' },
+      el: { label: 'Elementy', repsLabel: 'Utrzymanie', reps: '5–15 s', repsNote: 'kończ przed utratą techniki', rest: '2,5 min', restNote: 'ruchy dynamiczne 3 min', effortLabel: 'Częstotliwość', effort: '2–3×', effortNote: 'w tygodniu, zawsze na początku treningu', setsLabel: 'serie na element w treningu' }
+    },
+    ladderLbl: 'Drabinka · Front lever',
+    steps: ['Zwis i wznosy', 'Tuck', 'Zaawansowany tuck', 'Jedna noga', 'Rozkrok', 'Pełny front lever'],
+    ladderP: 'Dwie sesje z rzędu na górnej granicy, na przykład 3 razy po 15 sekund, i wchodzisz szczebel wyżej.',
+    pNote: 'Przy elementach takich jak front lever czy planche brakuje badań wprost na tych ćwiczeniach. Tam, gdzie plan opiera się na praktyce trenerskiej, aplikacja mówi o tym otwarcie.',
+    teamH1: 'Ścigaj się', teamH2: 'ze znajomymi.',
+    teamP: 'Załóż drużynę, wyślij kod i ćwiczcie razem. Ranking tygodnia i wspólny cel odświeżają się same po każdym treningu. Kliknij i zobacz, jak to jest wskoczyć na pierwsze miejsce.',
+    addBtn: 'Zrób trening +55 pkt', resetBtn: 'Od nowa', boardH: 'Ranking tygodnia', sample: 'przykład', toast: 'Awans na 1. miejsce!', you: 'Ty',
+    days: function (n) { return n + (n === 1 ? ' dzień' : ' dni'); },
+    prH1: 'Twoja waga', prH2: 'zostaje u Ciebie.',
+    c1h: 'Znajomi widzą', c1p: 'Tylko Twój pseudonim, punkty z bieżącego tygodnia i liczbę dni, w których ćwiczyłeś.',
+    c2h: 'Tylko na telefonie', c2p: 'Waga, skład ciała i wszystkie dane o zdrowiu. Nie wysyłamy ich nikomu.',
+    c3h: 'Usuwasz, kiedy chcesz', c3p: 'Konto drużynowe skasujesz jednym przyciskiem w zakładce Drużyna.',
+    pushAlt: 'Mężczyzna stoi na rękach na dachu budynku, w tle błękitne niebo',
+    finH1: 'Twój', finH2: 'ruch.',
+    finP: 'Pobierz aplikację i zrób pierwsze ćwiczenie jeszcze dziś. To wczesna wersja, więc każda Twoja uwaga ma znaczenie: Profil, a potem Zgłoś uwagę lub błąd.',
+    finBtn: 'Pobierz plik .apk', ver: 'Wersja',
+    st1: 'Na telefonie pobierz plik z końcówką .apk.', st2: 'Otwórz go i zezwól na instalację z tego źródła.', st3: 'Ostrzeżenie, że aplikacja nie pochodzi ze sklepu, jest normalne przed publikacją w Google Play.',
+    photos: 'Zdjęcia: Unsplash', locale: 'pl-PL'
+  },
+  en: {
+    title: 'Fitness Flow – start today, not tomorrow',
+    navTry: 'Try it', navPlans: 'Plans', navTeam: 'Team', navDl: 'Download',
+    badge: 'Early access · Android',
+    h1a: 'Start', h1b: 'today.', h1c: 'Not', h1d: 'tomorrow.',
+    heroP: 'Begin with one gentle exercise a day. Fitness Flow takes you further: a plan, a timer, rest breaks and progress. And your friends train with you.',
+    heroAlt: 'A woman sits on a bench on a hill, watching the sunset over the mountains',
+    ctaDl: 'Get it for Android', ctaTry: 'Try it live',
+    stat1: 'exercise a day to start', stat2: 'parts in every workout', stat3: 'weeks per goal block',
+    chipToday: 'Today', chipLeft: 'Time left today', chipGoal: 'Today’s goal', chipGoalV: '1 gentle exercise',
+    marq: ['Jumping jacks', 'Pull-ups', 'Push-ups', 'Front lever', 'Planche', 'Muscle-up', 'L-sit', 'Handstand', 'Running'],
+    runAlt: 'A runner on a wet road at dawn', big1: 'Every day.', big2: 'Bit by bit.',
+    s1h: 'Build the habit', s1p: 'No sign-up quiz. Your first goal is one gentle exercise a day, and the app asks for more only when it actually matters.',
+    s2h: 'Train with guidance', s2p: 'Warm-up, main part, cool-down. One tap starts a set, the timer guides you, and we ask for your result only afterwards.',
+    s3h: 'Go one step further', s3p: 'Nailed it? Your target grows by one rep or two seconds. Too hard? The plan steps back on its own.',
+    tryH1: 'Try it', tryH2: 'live.', tryP: 'Press Start and hold the position, or tick off your reps. It works exactly like a set in the app.',
+    calmAlt: 'A woman meditating on a terrace at sunset', calmTag: 'Holds', calmH1: 'Counts up.', calmH2: 'Buzzes at your goal.',
+    tHead: 'Planche lean · goal 18 s',
+    lReady: 'Ready?', lHold: 'Holding', lRes: 'Your result', lRest: 'Rest',
+    sGoal: 'Goal: 18 s', sBeat: 'Goal beaten! Keep holding', sFix: 'Adjust if needed', sNext: 'Next set coming up',
+    bStart: 'Start', bStop: 'Let go', bSave: 'Save & rest', bSkip: 'Skip rest', bMinus: 'Remove a second', bPlus: 'Add a second',
+    rHead: 'Push-ups · 8 reps', rOf: 'of 8 reps', rDone: 'Set complete!', rBtn: 'Done +1', rAgain: 'One more set',
+    matAlt: 'A woman stretching on a mat in front of a laptop playing a workout video', matTag: 'Reps', matH1: 'One goal,', matH2: 'one big button.',
+    wAria: 'Where to train', wH1: 'Train wherever', wH2: 'you are.',
+    trailAlt: 'Silhouette of a runner on rocks at sunset', stretchAlt: 'A woman in a lunge stretching her hips on a mat at home', yogaAlt: 'A woman sitting cross-legged on a mat, breathing calmly',
+    cap1: '01 · Outdoors', cap2: '02 · At home', cap3: '03 · To unwind',
+    pH1: 'A plan,', pH2: 'not a guess.',
+    pP: 'Pick a goal and a level. These are exactly the numbers the app will use, based on the American College of Sports Medicine guidelines (ACSM, 2026) and research reviews.',
+    goalAria: 'Goal', levelAria: 'Level', restLbl: 'Rest',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
+    goals: {
+      masa: { label: 'Muscle', repsLabel: 'Reps', reps: '8–15', repsNote: 'weighted: 6–10', rest: '2 min', restNote: 'weighted: 2.5 min', effortLabel: 'In reserve', effort: '1–3', effortNote: 'reps left in the tank, never to failure', setsLabel: 'sets per muscle group per week' },
+      wyt: { label: 'Endurance', repsLabel: 'Reps', reps: '15–25', repsNote: 'holds of 30–60 s', rest: '45–60 s', restNote: 'short rests', effortLabel: 'In reserve', effort: '2–4', effortNote: 'reps left in the tank', setsLabel: 'sets per muscle group per week' },
+      el: { label: 'Skills', repsLabel: 'Hold', reps: '5–15 s', repsNote: 'stop before your form breaks', rest: '2.5 min', restNote: 'dynamic moves: 3 min', effortLabel: 'Frequency', effort: '2–3×', effortNote: 'a week, always at the start of a session', setsLabel: 'sets per skill per session' }
+    },
+    ladderLbl: 'Progression · Front lever',
+    steps: ['Hang & raises', 'Tuck', 'Advanced tuck', 'One leg', 'Straddle', 'Full front lever'],
+    ladderP: 'Two sessions in a row at the top of the range, say 3 × 15 seconds, and you move up a step.',
+    pNote: 'For skills like the front lever or planche there is little research on the moves themselves. Where the plan relies on coaching practice, the app says so openly.',
+    teamH1: 'Race your', teamH2: 'friends.',
+    teamP: 'Create a team, share the code and train together. The weekly ranking and your shared goal update after every workout. Click and see what it feels like to jump into first place.',
+    addBtn: 'Do a workout +55 pts', resetBtn: 'Reset', boardH: 'Weekly ranking', sample: 'example', toast: 'You’re in 1st place!', you: 'You',
+    days: function (n) { return n + (n === 1 ? ' day' : ' days'); },
+    prH1: 'Your weight', prH2: 'stays with you.',
+    c1h: 'Friends see', c1p: 'Only your nickname, this week’s points and how many days you trained.',
+    c2h: 'Only on your phone', c2p: 'Weight, body composition and all health data. We never send them anywhere.',
+    c3h: 'Delete any time', c3p: 'Delete your team account with one tap in the Team tab.',
+    pushAlt: 'A man doing a handstand on a rooftop against a blue sky',
+    finH1: 'Your', finH2: 'move.',
+    finP: 'Get the app and do your first exercise today. It’s an early version, so your feedback really matters — send it from your Profile.',
+    finBtn: 'Download the .apk', ver: 'Version',
+    st1: 'On your phone, download the file ending in .apk.', st2: 'Open it and allow installs from this source.', st3: 'A warning that the app isn’t from a store is normal until it’s on Google Play.',
+    photos: 'Photos: Unsplash', locale: 'en-GB'
+  }
+};
+var FF_SETS = { masa: [10, 14, 18], wyt: [8, 10, 12], el: [3, 4, 5] };
+var FF_MAX = { masa: 18, wyt: 18, el: 5 };
+
+function ffFmt(s) { s = Math.max(0, s); return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60); }
+function ffPad(n) { return (n < 10 ? '0' : '') + n; }
+function ffRgba(hex, a) {
+  var h = String(hex || '#C8F542').replace('#', '');
+  if (h.length === 3) { h = h.split('').map(function (c) { return c + c; }).join(''); }
+  var n = parseInt(h.slice(0, 6), 16);
+  if (isNaN(n)) { n = 0xC8F542; }
+  return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+}
+function ffStartLang() {
+  try {
+    var q = new URLSearchParams(window.location.search).get('lang');
+    if (q === 'pl' || q === 'en') { return q; }
+  } catch (e) {}
+  try {
+    var saved = window.localStorage.getItem('ff-lang');
+    if (saved === 'pl' || saved === 'en') { return saved; }
+  } catch (e) {}
+  try {
+    var nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'pl';
+    return /^pl/i.test(nav) ? 'pl' : 'en';
+  } catch (e) {}
+  return 'pl';
+}
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { lang: ffStartLang(), apkUrl: FF_REL, apkVer: '', apkMb: 0, now: Date.now(), li: 0, run: false, ms: 0, done: false, res: 0, resting: false, rest: FF_REST, reps: 0, bump: '', pts: 295, toast: false, goal: 'masa', lvl: 1 };
+  }
+  componentDidMount() {
+    var self = this;
+    this.applyLang();
+    if (typeof fetch === 'function') {
+      fetch(FF_API, { headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (rel) {
+          var a = rel && (rel.assets || []).filter(function (x) { return /\.apk$/i.test(x.name); })[0];
+          if (!a || self._gone) { return; }
+          self.setState({ apkUrl: a.browser_download_url, apkVer: String(rel.tag_name || '').replace(/^v/, ''), apkMb: Math.round(a.size / 1048576) });
+        })
+        .catch(function () {});
+    }
+    this._tick = setInterval(function () {
+      var s = self.state;
+      var next = { now: Date.now(), li: (s.li + 1) % 12 };
+      if (s.resting) {
+        if (s.rest <= 1) { next.resting = false; next.rest = FF_REST; next.ms = 0; }
+        else { next.rest = s.rest - 1; }
+      }
+      self.setState(next);
+    }, 1000);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState && prevState.lang !== this.state.lang) { this.applyLang(); }
+  }
+  componentWillUnmount() {
+    this._gone = true;
+    clearInterval(this._tick); clearInterval(this._ti); clearTimeout(this._toastT);
+  }
+  applyLang() {
+    try {
+      document.documentElement.lang = this.state.lang;
+      document.title = FF_T[this.state.lang].title;
+    } catch (e) {}
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var accent = this.props.accent ?? '#C8F542';
+    var t = FF_T[s.lang] || FF_T.pl;
+
+    var langs = ['pl', 'en'].map(function (code) {
+      var sel = s.lang === code;
+      return {
+        label: code.toUpperCase(), pressed: sel ? 'true' : 'false',
+        fg: sel ? '#FFFFFF' : '#C3CAC4', bd: sel ? accent : 'transparent',
+        pick: function () {
+          try { window.localStorage.setItem('ff-lang', code); } catch (e) {}
+          self.setState({ lang: code });
+        }
+      };
+    });
+
+    var now = new Date(s.now);
+    var end = new Date(s.now); end.setHours(24, 0, 0, 0);
+    var left = Math.max(0, Math.floor((end - now) / 1000));
+    var dayLeft = ffPad(Math.floor(left / 3600)) + ':' + ffPad(Math.floor(left % 3600 / 60)) + ':' + ffPad(left % 60);
+    var dateLabel = '';
+    try { dateLabel = now.toLocaleDateString(t.locale, { weekday: 'short', day: 'numeric', month: 'short' }); } catch (e) { dateLabel = ''; }
+
+    var sec = Math.floor(s.ms / 1000);
+    var idle = !s.run && !s.done && !s.resting;
+    var hit = (s.run || idle) && sec >= FF_TARGET;
+    var tProg = s.resting ? s.rest / FF_REST : (s.done ? Math.min(s.res / FF_TARGET, 1) : Math.min(sec / FF_TARGET, 1));
+    var tLabel = s.resting ? t.lRest : (s.done ? t.lRes : (s.run ? t.lHold : t.lReady));
+    var tTime = s.resting ? ffFmt(s.rest) : (s.done ? ffFmt(s.res) : ffFmt(sec));
+    var tSub = s.resting ? t.sNext : (s.done ? t.sFix : (hit ? t.sBeat : t.sGoal));
+
+    var g = t.goals[s.goal];
+    var setsNow = FF_SETS[s.goal][s.lvl];
+    var blocks = [];
+    for (var i = 0; i < FF_MAX[s.goal]; i++) {
+      var lit = i < setsNow;
+      blocks.push({ bg: lit ? accent : '#1A1F1C', tf: lit ? 'scaleY(1)' : 'scaleY(0.6)', delay: (i * 30) + 'ms' });
+    }
+    var goals = ['masa', 'wyt', 'el'].map(function (k) {
+      var sel = s.goal === k;
+      return { label: t.goals[k].label, bg: sel ? accent : 'transparent', fg: sel ? '#0A0B0A' : '#E9EDE6', bd: sel ? accent : '#2F3631', pick: function () { self.setState({ goal: k }); } };
+    });
+    var levels = t.levels.map(function (l, idx) {
+      var sel = s.lvl === idx;
+      return { label: l, fg: sel ? '#FFFFFF' : '#8C958E', bd: sel ? accent : 'transparent', pick: function () { self.setState({ lvl: idx }); } };
+    });
+
+    var active = Math.floor(s.li / 2) % t.steps.length;
+    var ladder = t.steps.map(function (n, idx) {
+      return { h: (22 + idx * 15.6) + '%', bg: idx === active ? accent : (idx < active ? ffRgba(accent, 0.3) : '#1A1F1C') };
+    });
+
+    var myDays = 4 + Math.floor((s.pts - 295) / 55);
+    var people = [
+      { name: 'Kasia', pts: 340, d: 5 },
+      { name: t.you, pts: s.pts, d: myDays, me: true },
+      { name: 'Tomek', pts: 210, d: 3 },
+      { name: 'Ola', pts: 120, d: 2 }
+    ];
+    var sorted = people.slice().sort(function (a, b) { return b.pts - a.pts; });
+    var max = sorted[0].pts;
+    var board = people.map(function (p) {
+      var rank = sorted.indexOf(p);
+      return {
+        name: p.name, pts: p.pts, days: t.days(p.d), pos: '0' + (rank + 1),
+        top: (rank * 68) + 'px',
+        barW: Math.round(p.pts / max * 100) + '%',
+        barBg: p.me ? ffRgba(accent, 0.2) : 'rgba(255,255,255,0.035)',
+        bd: p.me ? accent : '#2A302C',
+        posColor: rank === 0 ? accent : '#8C958E'
+      };
+    });
+
+    return {
+      t: t,
+      accent: accent,
+      langs: langs,
+      marq: t.marq.concat(t.marq),
+      apkUrl: s.apkUrl,
+      apkInfo: s.apkVer ? (t.ver + ' ' + s.apkVer + ' · ' + s.apkMb + ' MB') : '',
+
+      dayLeft: dayLeft,
+      dateLabel: dateLabel,
+      dayBarW: Math.round((86400 - left) / 864) + '%',
+
+      tIdle: idle, tRun: s.run, tDone: s.done, tRest: s.resting,
+      tLabel: tLabel, tTime: tTime, tSub: tSub,
+      tSubColor: hit ? accent : '#8C958E',
+      tColor: s.resting ? '#FFFFFF' : accent,
+      tOff: (FF_C * (1 - tProg)).toFixed(2),
+      tHitCls: hit && s.run ? 'ff-hit' : '',
+      tRes: s.res,
+      tStart: function () {
+        clearInterval(self._ti);
+        self._t0 = Date.now();
+        self._ti = setInterval(function () { self.setState({ ms: Date.now() - self._t0 }); }, 100);
+        self.setState({ run: true, done: false, ms: 0 });
+      },
+      tStop: function () {
+        clearInterval(self._ti);
+        self.setState({ run: false, done: true, res: Math.floor((Date.now() - self._t0) / 1000) });
+      },
+      tMinus: function () { self.setState({ res: Math.max(0, self.state.res - 1) }); },
+      tPlus: function () { self.setState({ res: self.state.res + 1 }); },
+      tSave: function () { self.setState({ done: false, resting: true, rest: FF_REST, ms: 0 }); },
+      tSkip: function () { self.setState({ resting: false, rest: FF_REST, ms: 0 }); },
+
+      reps: s.reps,
+      bump: s.bump,
+      rOff: (FF_C * (1 - s.reps / 8)).toFixed(2),
+      rOpen: s.reps < 8,
+      rFull: s.reps >= 8,
+      rSub: s.reps >= 8 ? t.rDone : t.rOf,
+      rSubColor: s.reps >= 8 ? accent : '#8C958E',
+      tapRep: function () {
+        var st = self.state;
+        if (st.reps >= 8) { return; }
+        self.setState({ reps: st.reps + 1, bump: st.bump === 'bA' ? 'bB' : 'bA' });
+      },
+      resetRep: function () { self.setState({ reps: 0, bump: '' }); },
+
+      goals: goals, levels: levels, blocks: blocks,
+      g1: { repsLabel: g.repsLabel, reps: g.reps, repsNote: g.repsNote, rest: g.rest, restNote: g.restNote, effortLabel: g.effortLabel, effort: g.effort, effortNote: g.effortNote, sets: setsNow, setsLabel: g.setsLabel },
+
+      ladder: ladder,
+      stepName: t.steps[active],
+      stepNo: active + 1,
+
+      board: board,
+      toast: s.toast,
+      addPts: function () {
+        var before = self.state.pts;
+        var after = before + 55;
+        var promoted = before <= 340 && after > 340;
+        clearTimeout(self._toastT);
+        self.setState({ pts: after, toast: promoted });
+        if (promoted) { self._toastT = setTimeout(function () { self.setState({ toast: false }); }, 2700); }
+      },
+      resetPts: function () { clearTimeout(self._toastT); self.setState({ pts: 295, toast: false }); }
+    };
+  }
+  render() {
+    const v = this.renderVals();
+    return html`<div style="position: relative; background: #0A0B0A; color: #E9EDE6; font-family: 'Manrope', system-ui, sans-serif; font-size: 17px; line-height: 1.6; min-height: 100vh; overflow-x: hidden">
+
+<div aria-hidden="true" style="position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 70">
+<div class="ff-grain ff-grain-run" style="position: absolute; inset: -20%; opacity: 0.07"></div>
+</div>
+<div class="ff-prog" style="position: fixed; top: 0; left: 0; right: 0; height: 3px; background: ${v.accent}; z-index: 80"></div>
+
+<header style="position: absolute; top: 0; left: 0; right: 0; z-index: 40">
+<div style="max-width: 1320px; margin: 0 auto; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<a href="#start" style="display: flex; align-items: center; gap: 12px; text-decoration: none">
+<span style="width: 42px; height: 42px; background: ${v.accent}; color: #0A0B0A; display: flex; align-items: center; justify-content: center; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 900; font-size: 16px">FF</span>
+<span class="ff-brandtxt" style="font-family: 'Archivo', sans-serif; font-stretch: 120%; font-weight: 900; font-size: 18px; letter-spacing: 1px; color: #FFFFFF; text-transform: uppercase">Fitness Flow</span>
+</a>
+<nav aria-label="Menu" style="display: flex; align-items: center; gap: 4px 24px; font-size: 13px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase">
+<a class="ff-navl" href="#sprobuj" style="text-decoration: none; padding: 12px 0">${v.t.navTry}</a>
+<a class="ff-navl" href="#plany" style="text-decoration: none; padding: 12px 0">${v.t.navPlans}</a>
+<a class="ff-navl" href="#druzyna" style="text-decoration: none; padding: 12px 0">${v.t.navTeam}</a>
+<div role="group" aria-label="Język / Language" style="display: flex; gap: 12px; padding: 0 4px">
+${v.langs.map((lg, $index) => html`
+<button class="ff-lang" type="button" onClick=${lg.pick} aria-pressed=${lg.pressed} style="min-height: 44px; padding: 0 2px; border: none; border-bottom: 2px solid ${lg.bd}; background: transparent; color: ${lg.fg}; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 1px">${lg.label}</button>
+`)}
+</div>
+<a class="ff-btn" href="#pobierz" style="text-decoration: none; padding: 14px 20px; background: #FFFFFF; color: #0A0B0A">${v.t.navDl}</a>
+</nav>
+</div>
+</header>
+
+<section id="start" style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: flex-end">
+<div class="ff-reveal" style="position: absolute; inset: 0; overflow: hidden; background: #141816">
+<img class="ff-ken" src="img/bench.jpg" alt=${v.t.heroAlt} style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%" />
+</div>
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,11,10,0.7) 0%, rgba(10,11,10,0) 24%), linear-gradient(0deg, #0A0B0A 0%, rgba(10,11,10,0.55) 40%, rgba(10,11,10,0.15) 100%), linear-gradient(90deg, rgba(10,11,10,0.55) 0%, rgba(10,11,10,0) 60%)"></div>
+<div style="position: relative; max-width: 1320px; width: 100%; margin: 0 auto; padding: 150px 24px 64px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-end">
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 30px">
+<span class="ff-fade" style="display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #C3CAC4"><span class="ff-live" style="width: 8px; height: 8px; border-radius: 999px; background: ${v.accent}"></span>${v.t.badge}</span>
+<h1 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(64px, 9.6vw, 150px); line-height: 0.88; letter-spacing: -1px; color: #FFFFFF; text-transform: uppercase">
+<span style="display: block; overflow: hidden"><span class="ff-up ff-d1">${v.t.h1a}</span></span>
+<span style="display: block; overflow: hidden"><span class="ff-up ff-d2" style="color: ${v.accent}">${v.t.h1b}</span></span>
+<span style="display: block; overflow: hidden; padding-bottom: 0.04em"><span class="ff-up ff-d3" style="color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.85)">${v.t.h1c} <span style="position: relative; display: inline-block">${v.t.h1d}<span class="ff-strike" aria-hidden="true" style="position: absolute; left: -0.04em; right: -0.04em; top: 46%; height: 0.1em; background: ${v.accent}"></span></span></span></span>
+</h1>
+<p class="ff-fade" style="margin: 0; font-size: 20px; line-height: 1.55; color: #D3D8D2; max-width: 540px">${v.t.heroP}</p>
+<div class="ff-fade" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<a class="ff-btn" href=${v.apkUrl} style="display: inline-flex; align-items: center; gap: 14px; padding: 20px 28px; background: ${v.accent}; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none">${v.t.ctaDl}<svg class="ff-arr" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M12 4v13"></path><path d="M6 12l6 6 6-6"></path><path d="M4 21h16"></path></svg></a>
+<a class="ff-btn" href="#sprobuj" style="display: inline-flex; align-items: center; gap: 14px; padding: 20px 26px; border: 1px solid rgba(255,255,255,0.35); color: #FFFFFF; font-weight: 800; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none">${v.t.ctaTry}<svg class="ff-arr" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 12h15"></path><path d="M13 6l6 6-6 6"></path></svg></a>
+</div>
+<div class="ff-fade" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 560px">
+<div style="border-top: 1px solid rgba(255,255,255,0.25); padding-top: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF">1</span><span style="font-size: 13px; color: #B7BFB8">${v.t.stat1}</span></div>
+<div style="border-top: 1px solid rgba(255,255,255,0.25); padding-top: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF">3</span><span style="font-size: 13px; color: #B7BFB8">${v.t.stat2}</span></div>
+<div style="border-top: 1px solid rgba(255,255,255,0.25); padding-top: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF">6</span><span style="font-size: 13px; color: #B7BFB8">${v.t.stat3}</span></div>
+</div>
+</div>
+<div class="ff-chip" style="flex: 1 1 300px; max-width: 360px; background: rgba(10,11,10,0.82); backdrop-filter: blur(12px); border-top: 3px solid ${v.accent}; padding: 22px 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #9AA39C"><span style="display: inline-flex; align-items: center; gap: 8px"><span class="ff-live" style="width: 7px; height: 7px; border-radius: 999px; background: ${v.accent}"></span>${v.t.chipToday}</span><span>${v.dateLabel}</span></div>
+<span style="font-size: 14px; color: #B7BFB8">${v.t.chipLeft}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 52px; line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums">${v.dayLeft}</span>
+<div style="height: 4px; background: #232A25"><div class="ff-dbar" style="height: 100%; width: ${v.dayBarW}; background: ${v.accent}"></div></div>
+<div style="display: flex; justify-content: space-between; gap: 12px; padding-top: 4px; font-size: 14px"><span style="color: #9AA39C">${v.t.chipGoal}</span><span style="font-weight: 800; color: #FFFFFF">${v.t.chipGoalV}</span></div>
+</div>
+</div>
+</section>
+
+<div aria-hidden="true" style="background: ${v.accent}; color: #0A0B0A; overflow: hidden; padding: 14px 0; transform: rotate(-1.5deg) scale(1.03); margin: 8px 0 0; position: relative; z-index: 5">
+<div class="ff-marq" style="display: flex; width: max-content; gap: 36px; font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 38px; line-height: 1; text-transform: uppercase; white-space: nowrap">
+${v.marq.map((m, $index) => html`
+<span>${m}</span><span>/</span>
+`)}
+</div>
+</div>
+
+<section id="jak-dziala" style="position: relative; overflow: hidden; min-height: 760px; margin-top: 72px; display: flex; flex-direction: column; justify-content: flex-end">
+<div class="ff-zoom" style="position: absolute; inset: 0">
+<img src="img/run.jpg" alt=${v.t.runAlt} style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%" />
+</div>
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(0deg, #0A0B0A 0%, rgba(10,11,10,0.55) 45%, rgba(10,11,10,0.25) 100%)"></div>
+<div style="position: relative; overflow: hidden; padding-top: 120px">
+<div class="ff-left" style="font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(72px, 12vw, 190px); line-height: 0.86; color: #FFFFFF; text-transform: uppercase; white-space: nowrap; padding-left: 24px">${v.t.big1}</div>
+<div class="ff-right" style="font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(72px, 12vw, 190px); line-height: 0.86; color: transparent; -webkit-text-stroke: 2px ${v.accent}; text-transform: uppercase; white-space: nowrap; text-align: right; padding-right: 24px">${v.t.big2}</div>
+</div>
+<div style="position: relative; max-width: 1320px; width: 100%; margin: 0 auto; padding: 56px 24px 72px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px">
+<div class="ff-rv" style="border-top: 2px solid ${v.accent}; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: ${v.accent}">01</span>
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s1h}</h3>
+<p style="margin: 0; color: #C3CAC4">${v.t.s1p}</p>
+</div>
+<div class="ff-rv" style="border-top: 2px solid ${v.accent}; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: ${v.accent}">02</span>
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s2h}</h3>
+<p style="margin: 0; color: #C3CAC4">${v.t.s2p}</p>
+</div>
+<div class="ff-rv" style="border-top: 2px solid ${v.accent}; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: ${v.accent}">03</span>
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s3h}</h3>
+<p style="margin: 0; color: #C3CAC4">${v.t.s3p}</p>
+</div>
+</div>
+</section>
+
+<section id="sprobuj" style="padding: 120px 0 0">
+<div style="max-width: 1320px; margin: 0 auto; padding: 0 24px 56px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px">
+<h2 class="ff-rv" style="margin: 0; flex: 1 1 520px; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(56px, 8vw, 120px); line-height: 0.88; color: #FFFFFF; text-transform: uppercase">${v.t.tryH1}<br />${v.t.tryH2}</h2>
+<p class="ff-rv" style="margin: 0; flex: 1 1 340px; max-width: 420px; font-size: 18px; color: #B7BFB8">${v.t.tryP}</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2px; background: #0A0B0A">
+
+<div class="ff-pic ff-wipe" style="position: relative; min-height: 600px; background: #141816">
+<img class="ff-px" src="img/calm.jpg" alt=${v.t.calmAlt} style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover" />
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,11,10,0.9) 0%, rgba(10,11,10,0) 55%)"></div>
+<div style="position: absolute; left: 32px; right: 32px; bottom: 32px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: ${v.accent}">${v.t.calmTag}</span>
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 75%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF; text-transform: uppercase">${v.t.calmH1}<br />${v.t.calmH2}</span>
+</div>
+</div>
+
+<div style="position: relative; min-height: 600px; background: #111312; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 48px 24px; text-align: center">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #8C958E">${v.t.tHead}</span>
+<div class=${v.tHitCls} style="position: relative; width: 280px; height: 280px">
+<svg viewBox="0 0 260 260" width="280" height="280" aria-hidden="true" style="position: absolute; inset: 0">
+<circle cx="130" cy="130" r="112" fill="none" stroke="#1F2521" stroke-width="6"></circle>
+<circle cx="130" cy="130" r="124" fill="none" stroke="#1F2521" stroke-width="1" stroke-dasharray="2 6"></circle>
+<circle class="ff-ring" cx="130" cy="130" r="112" fill="none" stroke=${v.tColor} stroke-width="6" stroke-dasharray="703.72" stroke-dashoffset=${v.tOff} transform="rotate(-90 130 130)"></circle>
+</svg>
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #8C958E">${v.tLabel}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 72px; line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums">${v.tTime}</span>
+<span style="font-size: 14px; font-weight: 800; color: ${v.tSubColor}">${v.tSub}</span>
+</div>
+</div>
+${v.tIdle ? html`
+<button class="ff-btn" type="button" onClick=${v.tStart} style="min-width: 240px; padding: 20px 32px; border: none; background: ${v.accent}; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase">${v.t.bStart}</button>
+` : null}
+${v.tRun ? html`
+<button class="ff-btn" type="button" onClick=${v.tStop} style="min-width: 240px; padding: 20px 32px; border: none; background: #FFFFFF; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase">${v.t.bStop}</button>
+` : null}
+${v.tDone ? html`
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<button class="ff-btn" type="button" aria-label=${v.t.bMinus} onClick=${v.tMinus} style="width: 52px; height: 52px; border: 1px solid #3A423C; background: transparent; color: #FFFFFF; font-size: 24px; font-weight: 700">−</button>
+<span style="min-width: 96px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 28px; color: #FFFFFF">${v.tRes} s</span>
+<button class="ff-btn" type="button" aria-label=${v.t.bPlus} onClick=${v.tPlus} style="width: 52px; height: 52px; border: 1px solid #3A423C; background: transparent; color: #FFFFFF; font-size: 24px; font-weight: 700">+</button>
+</div>
+<button class="ff-btn" type="button" onClick=${v.tSave} style="min-width: 260px; padding: 20px 32px; border: none; background: ${v.accent}; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase">${v.t.bSave}</button>
+</div>
+` : null}
+${v.tRest ? html`
+<button class="ff-btn" type="button" onClick=${v.tSkip} style="min-width: 240px; padding: 20px 32px; border: 1px solid #3A423C; background: transparent; color: #FFFFFF; font-weight: 800; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase">${v.t.bSkip}</button>
+` : null}
+</div>
+
+<div style="position: relative; min-height: 600px; background: #111312; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 48px 24px; text-align: center">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #8C958E">${v.t.rHead}</span>
+<div style="position: relative; width: 280px; height: 280px">
+<svg viewBox="0 0 260 260" width="280" height="280" aria-hidden="true" style="position: absolute; inset: 0">
+<circle cx="130" cy="130" r="112" fill="none" stroke="#1F2521" stroke-width="6" stroke-dasharray="83.97 3.99" transform="rotate(-90 130 130)"></circle>
+<circle class="ff-ring" cx="130" cy="130" r="112" fill="none" stroke=${v.accent} stroke-width="6" stroke-dasharray="703.72" stroke-dashoffset=${v.rOff} transform="rotate(-90 130 130)"></circle>
+</svg>
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class=${v.bump} style="display: block; font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 120px; line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums">${v.reps}</span>
+<span style="font-size: 14px; font-weight: 800; color: ${v.rSubColor}">${v.rSub}</span>
+</div>
+</div>
+${v.rOpen ? html`
+<button class="ff-btn" type="button" onClick=${v.tapRep} style="min-width: 240px; padding: 20px 32px; border: none; background: ${v.accent}; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase">${v.t.rBtn}</button>
+` : null}
+${v.rFull ? html`
+<button class="ff-btn" type="button" onClick=${v.resetRep} style="min-width: 240px; padding: 20px 32px; border: 1px solid #3A423C; background: transparent; color: #FFFFFF; font-weight: 800; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase">${v.t.rAgain}</button>
+` : null}
+</div>
+
+<div class="ff-pic ff-wipe" style="position: relative; min-height: 600px; background: #141816">
+<img class="ff-px" src="img/mat.jpg" alt=${v.t.matAlt} style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%" />
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,11,10,0.9) 0%, rgba(10,11,10,0) 55%)"></div>
+<div style="position: absolute; left: 32px; right: 32px; bottom: 32px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: ${v.accent}">${v.t.matTag}</span>
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 75%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF; text-transform: uppercase">${v.t.matH1}<br />${v.t.matH2}</span>
+</div>
+</div>
+
+</div>
+</section>
+
+<section aria-label=${v.t.wAria} style="padding: 140px 0 120px; overflow: hidden">
+<div style="max-width: 1320px; margin: 0 auto; padding: 0 24px 48px">
+<h2 class="ff-rv" style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(56px, 8vw, 120px); line-height: 0.88; color: #FFFFFF; text-transform: uppercase">${v.t.wH1}<br /><span style="color: ${v.accent}">${v.t.wH2}</span></h2>
+</div>
+<div class="ff-track" style="display: flex; gap: 20px; width: max-content; padding-left: max(24px, calc((100% - 1320px) / 2 + 24px))">
+<figure class="ff-pic ff-mono" style="margin: 0; position: relative; width: clamp(300px, 46vw, 640px); height: clamp(380px, 38vw, 520px); background: #141816">
+<img src="img/trail.jpg" alt=${v.t.trailAlt} style="width: 100%; height: 100%; object-fit: cover" />
+<figcaption style="position: absolute; left: 0; bottom: 0; padding: 14px 20px; background: #0A0B0A; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #FFFFFF">${v.t.cap1}</figcaption>
+</figure>
+<figure class="ff-pic ff-mono" style="margin: 0; position: relative; width: clamp(300px, 46vw, 640px); height: clamp(380px, 38vw, 520px); background: #141816">
+<img src="img/stretch.jpg" alt=${v.t.stretchAlt} style="width: 100%; height: 100%; object-fit: cover" />
+<figcaption style="position: absolute; left: 0; bottom: 0; padding: 14px 20px; background: #0A0B0A; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #FFFFFF">${v.t.cap2}</figcaption>
+</figure>
+<figure class="ff-pic ff-mono" style="margin: 0; position: relative; width: clamp(300px, 46vw, 640px); height: clamp(380px, 38vw, 520px); background: #141816">
+<img src="img/yoga.jpg" alt=${v.t.yogaAlt} style="width: 100%; height: 100%; object-fit: cover" />
+<figcaption style="position: absolute; left: 0; bottom: 0; padding: 14px 20px; background: #0A0B0A; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #FFFFFF">${v.t.cap3}</figcaption>
+</figure>
+</div>
+</section>
+
+<section id="plany" style="border-top: 1px solid #1C211E">
+<div style="max-width: 1320px; margin: 0 auto; padding: 120px 24px; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px">
+<h2 class="ff-rv" style="margin: 0; flex: 1 1 520px; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(56px, 8vw, 120px); line-height: 0.88; color: #FFFFFF; text-transform: uppercase">${v.t.pH1}<br />${v.t.pH2}</h2>
+<p class="ff-rv" style="margin: 0; flex: 1 1 340px; max-width: 460px; font-size: 18px; color: #B7BFB8">${v.t.pP}</p>
+</div>
+<div class="ff-rv" style="display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; border-bottom: 1px solid #1F2521; padding-bottom: 24px">
+<div role="group" aria-label=${v.t.goalAria} style="display: flex; flex-wrap: wrap; gap: 0">
+${v.goals.map((g, $index) => html`
+<button type="button" onClick=${g.pick} style="min-height: 56px; padding: 0 26px; border: 1px solid ${g.bd}; margin-right: -1px; background: ${g.bg}; color: ${g.fg}; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 20px; text-transform: uppercase; transition: background-color .3s, color .3s">${g.label}</button>
+`)}
+</div>
+<div role="group" aria-label=${v.t.levelAria} style="display: flex; flex-wrap: wrap; gap: 18px; align-items: center">
+${v.levels.map((l, $index) => html`
+<button type="button" onClick=${l.pick} style="min-height: 44px; padding: 8px 0; border: none; border-bottom: 2px solid ${l.bd}; background: transparent; color: ${l.fg}; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color .3s, border-color .3s">${l.label}</button>
+`)}
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.g1.repsLabel}</span>
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.reps}</span>
+<span style="font-size: 14px; color: #8C958E">${v.g1.repsNote}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.t.restLbl}</span>
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.rest}</span>
+<span style="font-size: 14px; color: #8C958E">${v.g1.restNote}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.g1.effortLabel}</span>
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.effort}</span>
+<span style="font-size: 14px; color: #8C958E">${v.g1.effortNote}</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px">
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 96px; line-height: 0.9; color: ${v.accent}">${v.g1.sets}</span>
+<span style="font-size: 16px; font-weight: 700; color: #B7BFB8">${v.g1.setsLabel}</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 4px" aria-hidden="true">
+${v.blocks.map((b, $index) => html`
+<span class="ff-block" style="width: 48px; height: 64px; background: ${b.bg}; transform: ${b.tf}; transition-delay: ${b.delay}"></span>
+`)}
+</div>
+</div>
+</div>
+
+<div class="ff-rv" style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; border-top: 1px solid #1F2521; padding-top: 40px">
+<div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.t.ladderLbl} · ${v.stepNo}/6</span>
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 72%; font-weight: 900; font-size: 52px; line-height: 0.95; color: #FFFFFF; text-transform: uppercase">${v.stepName}</span>
+<p style="margin: 0; color: #B7BFB8">${v.t.ladderP}</p>
+</div>
+<div style="flex: 2 1 380px; height: 220px; display: flex; align-items: flex-end; gap: 4px" aria-hidden="true">
+${v.ladder.map((s, $index) => html`
+<div class="ff-step" style="flex: 1; height: ${s.h}; background: ${s.bg}"></div>
+`)}
+</div>
+</div>
+<p style="margin: 0; font-size: 14px; color: #8C958E; max-width: 780px">${v.t.pNote}</p>
+</div>
+</section>
+
+<section id="druzyna" style="background: #F2F4EE; color: #0A0B0A">
+<div style="max-width: 1320px; margin: 0 auto; padding: 120px 24px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+<div class="ff-rv" style="flex: 999 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(56px, 8vw, 120px); line-height: 0.88; text-transform: uppercase">${v.t.teamH1}<br />${v.t.teamH2}</h2>
+<p style="margin: 0; font-size: 19px; color: #3B423D; max-width: 520px">${v.t.teamP}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="ff-btn" type="button" onClick=${v.addPts} style="display: inline-flex; align-items: center; gap: 12px; padding: 20px 26px; border: none; background: #0A0B0A; color: #FFFFFF; font-weight: 800; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase">${v.t.addBtn}<svg class="ff-arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 12h15"></path><path d="M13 6l6 6-6 6"></path></svg></button>
+<button class="ff-btn" type="button" onClick=${v.resetPts} style="padding: 20px 24px; border: 1px solid #0A0B0A; background: transparent; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase">${v.t.resetBtn}</button>
+</div>
+</div>
+<div class="ff-rv" style="flex: 1 1 400px; position: relative; background: #0A0B0A; color: #E9EDE6; padding: 28px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 18px">
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 24px; color: #FFFFFF; text-transform: uppercase">${v.t.boardH}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8C958E; text-transform: uppercase">${v.t.sample}</span>
+</div>
+<div style="position: relative; height: 272px">
+${v.board.map((r, $index) => html`
+<div class="ff-row" style="position: absolute; left: 0; right: 0; top: ${r.top}; height: 60px; overflow: hidden; background: #161A17; border-left: 3px solid ${r.bd}">
+<div class="ff-bar" style="position: absolute; left: 0; top: 0; bottom: 0; width: ${r.barW}; background: ${r.barBg}"></div>
+<div style="position: relative; height: 100%; display: flex; align-items: center; gap: 14px; padding: 0 18px">
+<span style="width: 24px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; color: ${r.posColor}">${r.pos}</span>
+<span style="flex: 1; font-weight: 800; color: #FFFFFF">${r.name}</span>
+<span style="font-size: 13px; color: #8C958E">${r.days}</span>
+<span style="width: 56px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; color: #FFFFFF; font-variant-numeric: tabular-nums">${r.pts}</span>
+</div>
+</div>
+`)}
+</div>
+${v.toast ? html`
+<div class="ff-toast" role="status" style="position: absolute; left: 50%; bottom: -24px; padding: 14px 24px; background: ${v.accent}; color: #0A0B0A; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 20px; text-transform: uppercase; white-space: nowrap">${v.t.toast}</div>
+` : null}
+</div>
+</div>
+</section>
+
+<section id="prywatnosc">
+<div style="max-width: 1320px; margin: 0 auto; padding: 120px 24px; display: flex; flex-direction: column; gap: 48px">
+<h2 class="ff-rv" style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(56px, 8vw, 120px); line-height: 0.88; color: #FFFFFF; text-transform: uppercase">${v.t.prH1}<br /><span style="color: transparent; -webkit-text-stroke: 2px #FFFFFF">${v.t.prH2}</span></h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px">
+<div class="ff-rv" style="border-top: 1px solid #2A302C; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 26px; color: #FFFFFF; text-transform: uppercase">${v.t.c1h}</h3>
+<p style="margin: 0; color: #B7BFB8">${v.t.c1p}</p>
+</div>
+<div class="ff-rv" style="border-top: 1px solid #2A302C; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 26px; color: #FFFFFF; text-transform: uppercase">${v.t.c2h}</h3>
+<p style="margin: 0; color: #B7BFB8">${v.t.c2p}</p>
+</div>
+<div class="ff-rv" style="border-top: 1px solid #2A302C; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 26px; color: #FFFFFF; text-transform: uppercase">${v.t.c3h}</h3>
+<p style="margin: 0; color: #B7BFB8">${v.t.c3p}</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="pobierz" style="position: relative; overflow: hidden; min-height: 760px; display: flex; align-items: flex-end">
+<div class="ff-zoom" style="position: absolute; inset: 0">
+<img src="img/push.jpg" alt=${v.t.pushAlt} style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%" />
+</div>
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(0deg, #0A0B0A 0%, rgba(10,11,10,0.6) 45%, rgba(10,11,10,0.2) 100%), linear-gradient(90deg, rgba(10,11,10,0.6) 0%, rgba(10,11,10,0) 55%)"></div>
+<div style="position: relative; max-width: 1320px; width: 100%; margin: 0 auto; padding: 160px 24px 96px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-end">
+<div class="ff-rv" style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(72px, 11vw, 168px); line-height: 0.86; color: #FFFFFF; text-transform: uppercase">${v.t.finH1}<br /><span style="color: ${v.accent}">${v.t.finH2}</span></h2>
+<p style="margin: 0; font-size: 19px; color: #D3D8D2; max-width: 480px">${v.t.finP}</p>
+<a class="ff-btn" href=${v.apkUrl} style="align-self: flex-start; display: inline-flex; align-items: center; gap: 14px; padding: 22px 30px; background: ${v.accent}; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none">${v.t.finBtn}<svg class="ff-arr" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M12 4v13"></path><path d="M6 12l6 6 6-6"></path><path d="M4 21h16"></path></svg></a>
+${v.apkInfo ? html`<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: #B7BFB8">${v.apkInfo}</span>` : null}
+</div>
+<ol class="ff-rv" style="flex: 1 1 320px; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0">
+<li style="display: flex; gap: 18px; align-items: baseline; border-top: 1px solid rgba(255,255,255,0.2); padding: 16px 0">
+<span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: ${v.accent}">01</span>
+<span style="font-weight: 700; color: #FFFFFF">${v.t.st1}</span>
+</li>
+<li style="display: flex; gap: 18px; align-items: baseline; border-top: 1px solid rgba(255,255,255,0.2); padding: 16px 0">
+<span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: ${v.accent}">02</span>
+<span style="font-weight: 700; color: #FFFFFF">${v.t.st2}</span>
+</li>
+<li style="display: flex; gap: 18px; align-items: baseline; border-top: 1px solid rgba(255,255,255,0.2); border-bottom: 1px solid rgba(255,255,255,0.2); padding: 16px 0">
+<span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: ${v.accent}">03</span>
+<span style="font-weight: 700; color: #FFFFFF">${v.t.st3}</span>
+</li>
+</ol>
+</div>
+</section>
+
+<footer style="border-top: 1px solid #1C211E">
+<div style="max-width: 1320px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">
+<span>© 2026 Fitness Flow</span>
+<span>${v.t.photos}</span>
+<span>Android · PL / EN</span>
+</div>
+</footer>
+
+</div>`;
+  }
+}
+
+render(html`<${App} />`, document.getElementById('app'));
+</script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zaproszenie do drużyny · Fitness Flow</title>
+<meta name="description" content="Zaproszenie do drużyny w Fitness Flow – otwórz je w aplikacji.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!--
+  Zaproszenie do drużyny (TeamInviteLink w aplikacji). Kod, pseudonim zapraszającego i nazwa drużyny są w części
+  po „#”, więc nie trafiają na serwer. „Otwórz w aplikacji” = intent:// do fitnessflow://join?<to samo>;
+  bez aplikacji – ta strona z ?noapp=1. Nazwę drużyny aplikacja i tak pobiera z serwera (link można przerobić).
+-->
+<style>
+  :root {
+    --bg: #1E1E25; --card: #2D2D36; --card2: #3A3A45;
+    --text: #F3F3F3; --text2: #BABABA; --text3: #8C8C96;
+    --accent: #D5FF5F; --on-accent: #1E1E25;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.45; -webkit-font-smoothing: antialiased;
+    min-height: 100vh; display: flex; justify-content: center;
+    padding: max(24px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+  }
+  main { width: 100%; max-width: 460px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--text2); font-weight: 600; font-size: 14px; }
+  .brand img { width: 28px; height: 28px; }
+  h1 { font-size: 28px; line-height: 1.15; margin: 22px 0 6px; letter-spacing: -0.01em; }
+  .lead { color: var(--text2); margin: 0 0 20px; font-size: 15px; }
+  .card { background: var(--card); border-radius: 28px; padding: 20px; }
+  .row { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--card2); font-size: 15px; }
+  .row:last-child { border-bottom: 0; }
+  .row span:first-child { color: var(--text3); flex: 0 0 auto; }
+  .row span:last-child { text-align: right; font-weight: 600; }
+  .note { color: var(--text3); font-size: 13px; margin: 14px 4px 0; }
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; min-height: 56px; margin-top: 18px; border-radius: 999px;
+    font: inherit; font-weight: 700; font-size: 16px; text-decoration: none; border: 0; cursor: pointer;
+  }
+  .btn.primary { background: var(--accent); color: var(--on-accent); }
+  .btn.secondary { background: var(--card2); color: var(--text); margin-top: 10px; }
+  .alert { background: var(--card2); border-radius: 20px; padding: 14px 16px; margin-top: 18px; font-size: 14px; color: var(--text2); }
+  .alert b { color: var(--text); }
+  .steps { margin: 8px 0 0; padding-left: 20px; color: var(--text2); font-size: 14px; }
+  .steps li { margin: 4px 0; }
+  .code { margin: 14px 0 0; text-align: center; color: var(--text3); font-size: 13px; }
+  .code b { display: inline-block; margin-top: 6px; padding: 8px 14px; border-radius: 14px; background: var(--card2); color: var(--text); font-size: 20px; letter-spacing: 0.14em; user-select: all; }
+  .hidden { display: none; }
+  .error h1 { font-size: 22px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><img src="favicon.svg" alt="">Fitness Flow</div>
+
+  <section id="invite" class="hidden">
+    <h1 id="title"></h1>
+    <p class="lead" id="lead"></p>
+    <div class="card" id="rows"></div>
+    <p class="note" id="note"></p>
+
+    <div class="alert hidden" id="noapp"></div>
+
+    <a class="btn primary" id="open" href="#"></a>
+    <a class="btn secondary" id="get" href="https://github.com/CjxPL/fitnessflow-releases/releases/latest"></a>
+    <ol class="steps" id="steps"></ol>
+    <p class="code"><span id="codeLabel"></span><br><b id="code"></b></p>
+  </section>
+
+  <section id="broken" class="hidden error">
+    <h1 id="brokenTitle"></h1>
+    <p class="lead" id="brokenText"></p>
+    <a class="btn secondary" id="home" href="./"></a>
+  </section>
+</main>
+
+<script>
+(function () {
+  var pl = (new URLSearchParams(location.search).get('lang') || navigator.language || 'pl').toLowerCase().indexOf('pl') === 0;
+  document.documentElement.lang = pl ? 'pl' : 'en';
+  var T = pl ? {
+    title: 'Zaproszenie do drużyny', titleFrom: function (n) { return n + ' zaprasza Cię do drużyny'; },
+    team: 'Drużyna', from: 'Zaprasza', lead: 'Ćwiczcie razem: wspólny cel tygodnia i ranking. Dołączysz jednym dotknięciem w aplikacji Fitness Flow.',
+    note: 'Drużyna widzi tylko Twój pseudonim, punkty tygodnia i liczbę dni z ruchem – nigdy wagę ani dane o zdrowiu.',
+    open: 'Otwórz w aplikacji', get: 'Nie masz aplikacji? Pobierz Fitness Flow',
+    steps: ['Pobierz i zainstaluj aplikację (Android).', 'Wróć do tej strony i dotknij „Otwórz w aplikacji”.', 'Potwierdź dołączenie do drużyny.'],
+    codeLabel: 'Kod drużyny, gdyby coś nie działało (zakładka Drużyna → Dołącz kodem):',
+    noapp: '<b>Nie znaleźliśmy aplikacji na tym telefonie.</b> Zainstaluj ją, a potem wróć tutaj i dotknij „Otwórz w aplikacji” jeszcze raz.',
+    desktop: '<b>Otwórz ten link na telefonie z Androidem</b> – tam dołączysz do drużyny jednym dotknięciem.',
+    brokenTitle: 'Nie da się odczytać zaproszenia', brokenText: 'Link jest niepełny albo uszkodzony. Poproś znajomego, żeby wysłał go jeszcze raz z aplikacji (Drużyna → Zaproś znajomych).',
+    home: 'Zobacz Fitness Flow'
+  } : {
+    title: 'Team invitation', titleFrom: function (n) { return n + ' invites you to a team'; },
+    team: 'Team', from: 'Invited by', lead: 'Train together: a shared weekly goal and a ranking. You join with one tap in the Fitness Flow app.',
+    note: 'The team only sees your nickname, weekly points and number of active days – never your weight or health data.',
+    open: 'Open in the app', get: 'No app yet? Get Fitness Flow',
+    steps: ['Download and install the app (Android).', 'Come back to this page and tap “Open in the app”.', 'Confirm joining the team.'],
+    codeLabel: 'Team code in case something does not work (Team tab → Join with a code):',
+    noapp: '<b>We couldn’t find the app on this phone.</b> Install it, then come back here and tap “Open in the app” again.',
+    desktop: '<b>Open this link on an Android phone</b> – you join the team with one tap there.',
+    brokenTitle: 'Can’t read this invitation', brokenText: 'The link is incomplete or damaged. Ask your friend to send it again from the app (Team → Invite friends).',
+    home: 'See Fitness Flow'
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var raw = location.hash.replace(/^#/, '');
+  var q = {};
+  raw.split('&').forEach(function (p) {
+    var i = p.indexOf('=');
+    if (i > 0) { try { q[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1).replace(/\+/g, ' ')); } catch (e) {} }
+  });
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function clean(s, max) { return String(s || '').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, max); }
+
+  var code = String(q.c || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (!q.v || code.length !== 6) {
+    $('broken').classList.remove('hidden');
+    $('brokenTitle').textContent = T.brokenTitle;
+    $('brokenText').textContent = T.brokenText;
+    $('home').textContent = T.home;
+    $('home').href = './?lang=' + (pl ? 'pl' : 'en');
+    return;
+  }
+
+  var from = clean(q.n, 20), team = clean(q.g, 30);
+  // Link niesie tylko kod, pseudonim i nazwę; do aplikacji przekazujemy znormalizowane wartości
+  var pass = 'v=1&c=' + code + (from ? '&n=' + encodeURIComponent(from) : '') + (team ? '&g=' + encodeURIComponent(team) : '');
+
+  var heading = from ? T.titleFrom(from) : T.title;
+  document.title = heading + ' · Fitness Flow';
+  $('title').textContent = heading;
+  $('lead').textContent = T.lead;
+
+  var rows = [];
+  if (team) rows.push([T.team, team]);
+  if (from) rows.push([T.from, from]);
+  if (rows.length) {
+    $('rows').innerHTML = rows.map(function (r) {
+      return '<div class="row"><span>' + esc(r[0]) + '</span><span>' + esc(r[1]) + '</span></div>';
+    }).join('');
+  } else {
+    $('rows').classList.add('hidden');
+  }
+  $('note').textContent = T.note;
+
+  // Otwieranie aplikacji: Android – intent:// (Chrome, karta w WhatsApp/Messengerze); bez aplikacji – powrót tu z ?noapp=1
+  var android = /android/i.test(navigator.userAgent);
+  var back = location.origin + location.pathname + '?noapp=1' + (pl ? '' : '&lang=en') + '#' + pass;
+  var open = $('open');
+  open.textContent = T.open;
+  if (android) {
+    open.href = 'intent://join?' + pass + '#Intent;scheme=fitnessflow;package=pl.fouroptima.fitnessflow;S.browser_fallback_url=' + encodeURIComponent(back) + ';end';
+  } else {
+    open.href = 'fitnessflow://join?' + pass;
+  }
+  $('get').textContent = T.get;
+  $('steps').innerHTML = T.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('');
+  $('codeLabel').textContent = T.codeLabel;
+  $('code').textContent = code;
+
+  var noapp = $('noapp');
+  if (new URLSearchParams(location.search).get('noapp') === '1') { noapp.innerHTML = T.noapp; noapp.classList.remove('hidden'); }
+  else if (!android) { noapp.innerHTML = T.desktop; noapp.classList.remove('hidden'); open.classList.add('hidden'); }
+
+  $('invite').classList.remove('hidden');
+})();
+</script>
+</body>
+</html>
