@@ -41,9 +41,7 @@ button{font-family:inherit;cursor:pointer}
 img{display:block}
 .ff-grain{background-image:url(img/grain.png);background-size:220px 220px}
 @keyframes ffGrain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-6%,-2%)}80%{transform:translate(5%,4%)}100%{transform:translate(0,0)}}
-.ff-grain-run{animation:ffGrain .9s steps(5) infinite}
 @keyframes ffMarq{to{transform:translateX(-50%)}}
-.ff-marq{animation:ffMarq 30s linear infinite}
 @keyframes ffReveal{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
 .ff-reveal{animation:ffReveal 1.4s cubic-bezier(.77,0,.18,1) both}
 @keyframes ffKen{from{transform:scale(1.18)}to{transform:scale(1.04)}}
@@ -110,8 +108,6 @@ img{display:block}
 @supports (animation-timeline: view()){
 .ff-rv{animation:ffRv linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
 .ff-wipe{animation:ffWipe linear both;animation-timeline:view();animation-range:entry 10% cover 40%}
-.ff-zoom{animation:ffZoomOut linear both;animation-timeline:view();animation-range:entry 0% cover 60%}
-.ff-px{animation:ffPx linear both;animation-timeline:view()}
 .ff-track{animation:ffTrack linear both;animation-timeline:view()}
 .ff-left{animation:ffLeft linear both;animation-timeline:view()}
 .ff-right{animation:ffRight linear both;animation-timeline:view()}
@@ -177,6 +173,7 @@ var FF_T = {
     },
     ladderLbl: 'Drabinka · Front lever',
     steps: ['Zwis i wznosy', 'Tuck', 'Zaawansowany tuck', 'Jedna noga', 'Rozkrok', 'Pełny front lever'],
+    ladderHint: 'Dotknij szczebla, żeby zobaczyć, jak rośnie trudność.',
     ladderP: 'Dwie sesje z rzędu na górnej granicy, na przykład 3 razy po 15 sekund, i wchodzisz szczebel wyżej.',
     pNote: 'Przy elementach takich jak front lever czy planche brakuje badań wprost na tych ćwiczeniach. Tam, gdzie plan opiera się na praktyce trenerskiej, aplikacja mówi o tym otwarcie.',
     teamH1: 'Ścigaj się', teamH2: 'ze znajomymi.',
@@ -235,6 +232,7 @@ var FF_T = {
     },
     ladderLbl: 'Progression · Front lever',
     steps: ['Hang & raises', 'Tuck', 'Advanced tuck', 'One leg', 'Straddle', 'Full front lever'],
+    ladderHint: 'Tap a step to see how the difficulty grows.',
     ladderP: 'Two sessions in a row at the top of the range, say 3 × 15 seconds, and you move up a step.',
     pNote: 'For skills like the front lever or planche there is little research on the moves themselves. Where the plan relies on coaching practice, the app says so openly.',
     teamH1: 'Race your', teamH2: 'friends.',
@@ -302,29 +300,23 @@ class DayChip extends Component {
 }
 
 class Ladder extends Component {
-  constructor(props) { super(props); this.state = { step: 0 }; }
-  componentDidMount() {
-    var self = this;
-    var calm = false;
-    try { calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-    if (calm) { this.setState({ step: 3 }); return; }
-    this._i = setInterval(function () { self.setState(function (s) { return { step: s.step + 1 }; }); }, 2000);
-  }
-  componentWillUnmount() { clearInterval(this._i); }
+  constructor(props) { super(props); this.state = { step: 1 }; }
   render({ t, accent }, { step }) {
-    var active = step % t.steps.length;
+    var self = this;
+    var active = step;
     var bars = t.steps.map(function (n, idx) {
-      return { h: (22 + idx * 15.6) + '%', bg: idx === active ? accent : (idx < active ? ffRgba(accent, 0.3) : '#1A1F1C') };
+      return { n: n, idx: idx, h: (22 + idx * 15.6) + '%', bg: idx === active ? accent : (idx < active ? ffRgba(accent, 0.3) : '#1A1F1C') };
     });
     return html`<div class="ff-rv" style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; border-top: 1px solid #1F2521; padding-top: 40px">
 <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 10px">
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${t.ladderLbl} · ${active + 1}/6</span>
 <span style="font-family: 'Archivo', sans-serif; font-stretch: 72%; font-weight: 900; font-size: 52px; line-height: 0.95; color: #FFFFFF; text-transform: uppercase">${t.steps[active]}</span>
 <p style="margin: 0; color: #B7BFB8">${t.ladderP}</p>
+<span style="font-size: 14px; color: #8C958E">${t.ladderHint}</span>
 </div>
-<div style="flex: 2 1 380px; height: 220px; display: flex; align-items: flex-end; gap: 4px" aria-hidden="true">
-${bars.map((s, $index) => html`
-<div class="ff-step" style="flex: 1; height: ${s.h}; background: ${s.bg}"></div>
+<div role="group" aria-label=${t.ladderLbl} style="flex: 2 1 380px; height: 220px; display: flex; align-items: flex-end; gap: 4px">
+${bars.map((s) => html`
+<button type="button" aria-label=${s.n} aria-pressed=${s.idx === active} onClick=${function () { self.setState({ step: s.idx }); }} class="ff-step" style="flex: 1; height: ${s.h}; background: ${s.bg}; border: 0; padding: 0; cursor: pointer"></button>
 `)}
 </div>
 </div>`;
@@ -433,7 +425,7 @@ class App extends Component {
       t: t,
       accent: accent,
       langs: langs,
-      marq: t.marq.concat(t.marq),
+      marq: t.marq,
       apkUrl: s.apkUrl,
       apkInfo: s.apkVer ? (t.ver + ' ' + s.apkVer + ' · ' + s.apkMb + ' MB') : '',
 
@@ -552,11 +544,9 @@ ${v.langs.map((lg, $index) => html`
 </div>
 </section>
 
-<div aria-hidden="true" style="background: ${v.accent}; color: #0A0B0A; overflow: hidden; padding: 14px 0; transform: rotate(-1.5deg) scale(1.03); margin: 8px 0 0; position: relative; z-index: 5">
-<div class="ff-marq" style="display: flex; width: max-content; gap: 36px; font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 38px; line-height: 1; text-transform: uppercase; white-space: nowrap">
-${v.marq.map((m, $index) => html`
-<span>${m}</span><span>/</span>
-`)}
+<div style="background: ${v.accent}; color: #0A0B0A; padding: 18px 24px; margin: 8px 0 0">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 28px; font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: clamp(22px, 4vw, 32px); line-height: 1.1; text-transform: uppercase">
+${v.marq.slice(0, 9).map((m, $index) => html`<span>${m}</span>`)}
 </div>
 </div>
 
