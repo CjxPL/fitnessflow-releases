@@ -75,6 +75,21 @@ img{display:block}
 .ff-pic:hover img{transform:scale(1.07)}
 .ff-mono img{filter:grayscale(.85) contrast(1.1)}
 .ff-mono:hover img{filter:grayscale(0) contrast(1.05)}
+@media (max-width:760px){
+.ff-track{animation:none!important;transform:none!important;width:auto!important;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 24px!important;scroll-padding:0 24px;-webkit-overflow-scrolling:touch}
+.ff-track>figure{flex:0 0 78vw!important;width:78vw!important;height:min(112vw,440px)!important;scroll-snap-align:start}
+.ff-wsec{padding:88px 0 72px!important}
+}
+@media (max-width:640px){
+.ff-goals{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}
+.ff-goals button{padding:0 2px!important;font-size:13px!important;min-height:52px!important}
+.ff-levels{width:100%;justify-content:space-between;gap:8px!important}
+.ff-levels button{font-size:12px!important;letter-spacing:.5px!important}
+.ff-stats{grid-template-columns:1fr!important;gap:0!important}
+.ff-st{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l n" "t n";align-items:center;column-gap:16px;row-gap:2px;padding:16px 0;border-bottom:1px solid #1F2521}
+.ff-sl{grid-area:l}.ff-sx{grid-area:t}.ff-sn{grid-area:n;font-size:52px!important;text-align:right}
+.ff-sets{font-size:72px!important}
+}
 .ff-row{transition:top .7s cubic-bezier(.3,1.35,.5,1)}
 .ff-bar{transition:width .9s cubic-bezier(.2,.8,.2,1)}
 .ff-ring{transition:stroke-dashoffset .35s linear,stroke .3s}
@@ -674,7 +689,7 @@ ${v.rFull ? html`
 </div>
 </section>
 
-<section aria-label=${v.t.wAria} style="padding: 140px 0 120px; overflow: hidden">
+<section class="ff-wsec" aria-label=${v.t.wAria} style="padding: 140px 0 120px; overflow: hidden">
 <div style="max-width: 1320px; margin: 0 auto; padding: 0 24px 48px">
 <h2 class="ff-rv" style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(56px, 8vw, 120px); line-height: 0.88; color: #FFFFFF; text-transform: uppercase">${v.t.wH1}<br /><span style="color: ${v.accent}">${v.t.wH2}</span></h2>
 </div>
@@ -702,37 +717,37 @@ ${v.rFull ? html`
 </div>
 <div class="ff-rv" style="display: flex; flex-direction: column; gap: 36px">
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; border-bottom: 1px solid #1F2521; padding-bottom: 24px">
-<div role="group" aria-label=${v.t.goalAria} style="display: flex; flex-wrap: wrap; gap: 0">
+<div class="ff-goals" role="group" aria-label=${v.t.goalAria} style="display: flex; flex-wrap: wrap; gap: 0">
 ${v.goals.map((g, $index) => html`
 <button type="button" onClick=${g.pick} style="min-height: 56px; padding: 0 26px; border: 1px solid ${g.bd}; margin-right: -1px; background: ${g.bg}; color: ${g.fg}; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 20px; text-transform: uppercase; transition: background-color .3s, color .3s">${g.label}</button>
 `)}
 </div>
-<div role="group" aria-label=${v.t.levelAria} style="display: flex; flex-wrap: wrap; gap: 18px; align-items: center">
+<div class="ff-levels" role="group" aria-label=${v.t.levelAria} style="display: flex; flex-wrap: wrap; gap: 18px; align-items: center">
 ${v.levels.map((l, $index) => html`
 <button type="button" onClick=${l.pick} style="min-height: 44px; padding: 8px 0; border: none; border-bottom: 2px solid ${l.bd}; background: transparent; color: ${l.fg}; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color .3s, border-color .3s">${l.label}</button>
 `)}
 </div>
 </div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px">
-<div style="display: flex; flex-direction: column; gap: 4px">
-<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.g1.repsLabel}</span>
-<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.reps}</span>
-<span style="font-size: 14px; color: #8C958E">${v.g1.repsNote}</span>
+<div class="ff-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px">
+<div class="ff-st" style="display: flex; flex-direction: column; gap: 4px">
+<span class="ff-sl" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.g1.repsLabel}</span>
+<span class="ff-sn" style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.reps}</span>
+<span class="ff-sx" style="font-size: 14px; color: #8C958E">${v.g1.repsNote}</span>
 </div>
-<div style="display: flex; flex-direction: column; gap: 4px">
-<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.t.restLbl}</span>
-<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.rest}</span>
-<span style="font-size: 14px; color: #8C958E">${v.g1.restNote}</span>
+<div class="ff-st" style="display: flex; flex-direction: column; gap: 4px">
+<span class="ff-sl" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.t.restLbl}</span>
+<span class="ff-sn" style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.rest}</span>
+<span class="ff-sx" style="font-size: 14px; color: #8C958E">${v.g1.restNote}</span>
 </div>
-<div style="display: flex; flex-direction: column; gap: 4px">
-<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.g1.effortLabel}</span>
-<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.effort}</span>
-<span style="font-size: 14px; color: #8C958E">${v.g1.effortNote}</span>
+<div class="ff-st" style="display: flex; flex-direction: column; gap: 4px">
+<span class="ff-sl" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">${v.g1.effortLabel}</span>
+<span class="ff-sn" style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 72px; line-height: 1; color: #FFFFFF">${v.g1.effort}</span>
+<span class="ff-sx" style="font-size: 14px; color: #8C958E">${v.g1.effortNote}</span>
 </div>
 </div>
 <div style="display: flex; flex-direction: column; gap: 16px">
 <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px">
-<span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 96px; line-height: 0.9; color: ${v.accent}">${v.g1.sets}</span>
+<span class="ff-sets" style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 96px; line-height: 0.9; color: ${v.accent}">${v.g1.sets}</span>
 <span style="font-size: 16px; font-weight: 700; color: #B7BFB8">${v.g1.setsLabel}</span>
 </div>
 <div style="display: flex; flex-wrap: wrap; gap: 4px" aria-hidden="true">
