@@ -132,7 +132,6 @@ var FF_T = {
     heroAlt: 'Kobieta siedzi na ławce na wzgórzu i patrzy na zachód słońca nad górami',
     noGear: 'Treningi z własną masą ciała. Na start nie potrzebujesz żadnego sprzętu.',
     ctaDl: 'Pobierz na Androida', ctaTry: 'Spróbuj na żywo',
-    stat1: 'ćwiczenie dziennie na start', stat2: 'części każdego treningu', stat3: 'tygodni w bloku celów',
     chipToday: 'Dziś', chipLeft: 'Do końca dnia zostało', chipGoal: 'Cel na dziś', chipGoalV: '1 łagodne ćwiczenie',
     marq: ['Pajacyki', 'Podciąganie', 'Pompki', 'Front lever', 'Planche', 'Muscle-up', 'L-sit', 'Stanie na rękach', 'Bieg'],
     runAlt: 'Biegacz na mokrej drodze o świcie', big1: 'Codziennie.', big2: 'Po trochu.',
@@ -169,14 +168,14 @@ var FF_T = {
     days: function (n) { return n + (n === 1 ? ' dzień' : ' dni'); },
     prH1: 'Twoja waga', prH2: 'zostaje u Ciebie.',
     c1h: 'Znajomi widzą', c1p: 'Tylko Twój pseudonim, punkty z bieżącego tygodnia i liczbę dni, w których ćwiczyłeś.',
-    c2h: 'Tylko na telefonie', c2p: 'Waga, skład ciała i wszystkie dane o zdrowiu. Nie wysyłamy ich nikomu.',
+    c2h: 'Tylko na telefonie', c2p: 'Waga, skład ciała i dane z zegarka zostają w telefonie. Nie wysyłamy ich na żaden serwer.',
     c3h: 'Usuwasz, kiedy chcesz', c3p: 'Konto drużynowe skasujesz jednym przyciskiem w zakładce Drużyna.',
     pushAlt: 'Mężczyzna stoi na rękach na dachu budynku, w tle błękitne niebo',
     finH1: 'Twój', finH2: 'ruch.',
     finP: 'Pobierz aplikację i zrób pierwsze ćwiczenie jeszcze dziś. To wczesna wersja, więc każda Twoja uwaga ma znaczenie: Profil, a potem Zgłoś uwagę lub błąd.',
     finBtn: 'Pobierz plik .apk', ver: 'Wersja',
     st1: 'Na telefonie pobierz plik z końcówką .apk.', st2: 'Otwórz go i zezwól na instalację z tego źródła.', st3: 'Ostrzeżenie, że aplikacja nie pochodzi ze sklepu, jest normalne przed publikacją w Google Play.',
-    photos: 'Zdjęcia: Unsplash', locale: 'pl-PL'
+    photos: 'Zdjęcia: Unsplash', privacy: 'Prywatność', contact: 'Kontakt', locale: 'pl-PL'
   },
   en: {
     title: 'Fitness Flow – start today, not tomorrow',
@@ -188,7 +187,6 @@ var FF_T = {
     heroAlt: 'A woman sits on a bench on a hill, watching the sunset over the mountains',
     noGear: 'Bodyweight workouts. You don’t need any equipment to start.',
     ctaDl: 'Get it for Android', ctaTry: 'Try it live',
-    stat1: 'exercise a day to start', stat2: 'parts in every workout', stat3: 'weeks per goal block',
     chipToday: 'Today', chipLeft: 'Time left today', chipGoal: 'Today’s goal', chipGoalV: '1 gentle exercise',
     marq: ['Jumping jacks', 'Pull-ups', 'Push-ups', 'Front lever', 'Planche', 'Muscle-up', 'L-sit', 'Handstand', 'Running'],
     runAlt: 'A runner on a wet road at dawn', big1: 'Every day.', big2: 'Bit by bit.',
@@ -225,14 +223,14 @@ var FF_T = {
     days: function (n) { return n + (n === 1 ? ' day' : ' days'); },
     prH1: 'Your weight', prH2: 'stays with you.',
     c1h: 'Friends see', c1p: 'Only your nickname, this week’s points and how many days you trained.',
-    c2h: 'Only on your phone', c2p: 'Weight, body composition and all health data. We never send them anywhere.',
+    c2h: 'Only on your phone', c2p: 'Weight, body composition and watch data stay on your phone. We never send them to any server.',
     c3h: 'Delete any time', c3p: 'Delete your team account with one tap in the Team tab.',
     pushAlt: 'A man doing a handstand on a rooftop against a blue sky',
     finH1: 'Your', finH2: 'move.',
     finP: 'Get the app and do your first exercise today. It’s an early version, so your feedback really matters — send it from your Profile.',
     finBtn: 'Download the .apk', ver: 'Version',
     st1: 'On your phone, download the file ending in .apk.', st2: 'Open it and allow installs from this source.', st3: 'A warning that the app isn’t from a store is normal until it’s on Google Play.',
-    photos: 'Photos: Unsplash', locale: 'en-GB'
+    photos: 'Photos: Unsplash', privacy: 'Privacy', contact: 'Contact', locale: 'en-GB'
   }
 };
 var FF_SETS = { masa: [10, 14, 18], wyt: [8, 10, 12], el: [3, 4, 5] };
@@ -408,7 +406,8 @@ class App extends Component {
         barW: Math.round(p.pts / max * 100) + '%',
         barBg: p.me ? ffRgba(accent, 0.2) : 'rgba(255,255,255,0.035)',
         bd: p.me ? accent : '#2A302C',
-        posColor: rank === 0 ? accent : '#8C958E'
+        posColor: rank === 0 ? accent : (p.me ? '#E9EDE6' : '#8C958E'),
+        dayColor: p.me ? '#E9EDE6' : '#8C958E'
       };
     });
 
@@ -508,6 +507,7 @@ ${v.langs.map((lg, $index) => html`
 </div>
 </header>
 
+<main>
 <section id="start" style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: flex-end">
 <div class="ff-reveal" style="position: absolute; inset: 0; overflow: hidden; background: #141816">
 <img class="ff-ken" src="img/bench.jpg" fetchpriority="high" decoding="async" alt=${v.t.heroAlt} style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%" />
@@ -515,7 +515,6 @@ ${v.langs.map((lg, $index) => html`
 <div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,11,10,0.7) 0%, rgba(10,11,10,0) 24%), linear-gradient(0deg, #0A0B0A 0%, rgba(10,11,10,0.55) 40%, rgba(10,11,10,0.15) 100%), linear-gradient(90deg, rgba(10,11,10,0.55) 0%, rgba(10,11,10,0) 60%)"></div>
 <div style="position: relative; max-width: 1320px; width: 100%; margin: 0 auto; padding: 150px 24px 64px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-end">
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 30px">
-<span class="ff-fade" style="display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #C3CAC4"><span class="ff-live" style="width: 8px; height: 8px; border-radius: 999px; background: ${v.accent}"></span>${v.t.badge}</span>
 <h1 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 68%; font-weight: 900; font-size: clamp(64px, 9.6vw, 150px); line-height: 0.88; letter-spacing: -1px; color: #FFFFFF; text-transform: uppercase">
 <span style="display: block; overflow: hidden"><span class="ff-up ff-d1">${v.t.h1a}</span></span>
 <span style="display: block; overflow: hidden"><span class="ff-up ff-d2" style="color: ${v.accent}">${v.t.h1b}</span></span>
@@ -526,11 +525,6 @@ ${v.langs.map((lg, $index) => html`
 <div class="ff-fade" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
 <a class="ff-btn" href=${v.apkUrl} style="display: inline-flex; align-items: center; gap: 14px; padding: 20px 28px; background: ${v.accent}; color: #0A0B0A; font-weight: 800; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none">${v.t.ctaDl}<svg class="ff-arr" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M12 4v13"></path><path d="M6 12l6 6 6-6"></path><path d="M4 21h16"></path></svg></a>
 <a class="ff-btn" href="#sprobuj" style="display: inline-flex; align-items: center; gap: 14px; padding: 20px 26px; border: 1px solid rgba(255,255,255,0.35); color: #FFFFFF; font-weight: 800; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none">${v.t.ctaTry}<svg class="ff-arr" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 12h15"></path><path d="M13 6l6 6-6 6"></path></svg></a>
-</div>
-<div class="ff-fade" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 560px">
-<div style="border-top: 1px solid rgba(255,255,255,0.25); padding-top: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF">1</span><span style="font-size: 13px; color: #B7BFB8">${v.t.stat1}</span></div>
-<div style="border-top: 1px solid rgba(255,255,255,0.25); padding-top: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF">3</span><span style="font-size: 13px; color: #B7BFB8">${v.t.stat2}</span></div>
-<div style="border-top: 1px solid rgba(255,255,255,0.25); padding-top: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Archivo', sans-serif; font-stretch: 70%; font-weight: 900; font-size: 40px; line-height: 1; color: #FFFFFF">6</span><span style="font-size: 13px; color: #B7BFB8">${v.t.stat3}</span></div>
 </div>
 </div>
 <${DayChip} t=${v.t} accent=${v.accent} />
@@ -557,17 +551,17 @@ ${v.marq.map((m, $index) => html`
 <div style="position: relative; max-width: 1320px; width: 100%; margin: 0 auto; padding: 56px 24px 72px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px">
 <div class="ff-rv" style="border-top: 2px solid ${v.accent}; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: ${v.accent}">01</span>
-<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s1h}</h3>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s1h}</h2>
 <p style="margin: 0; color: #C3CAC4">${v.t.s1p}</p>
 </div>
 <div class="ff-rv" style="border-top: 2px solid ${v.accent}; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: ${v.accent}">02</span>
-<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s2h}</h3>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s2h}</h2>
 <p style="margin: 0; color: #C3CAC4">${v.t.s2p}</p>
 </div>
 <div class="ff-rv" style="border-top: 2px solid ${v.accent}; padding-top: 18px; display: flex; flex-direction: column; gap: 8px">
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: ${v.accent}">03</span>
-<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s3h}</h3>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.05; color: #FFFFFF; text-transform: uppercase">${v.t.s3h}</h2>
 <p style="margin: 0; color: #C3CAC4">${v.t.s3p}</p>
 </div>
 </div>
@@ -747,12 +741,12 @@ ${v.blocks.map((b, $index) => html`
 </div>
 <div style="position: relative; height: 272px">
 ${v.board.map((r, $index) => html`
-<div class="ff-row" style="position: absolute; left: 0; right: 0; top: ${r.top}; height: 60px; overflow: hidden; background: #161A17; border-left: 3px solid ${r.bd}">
+<div class="ff-row" style="position: absolute; left: 0; right: 0; top: ${r.top}; height: 60px; overflow: hidden; background: #161A17; box-shadow: inset 0 0 0 1px ${r.bd}">
 <div class="ff-bar" style="position: absolute; left: 0; top: 0; bottom: 0; width: ${r.barW}; background: ${r.barBg}"></div>
 <div style="position: relative; height: 100%; display: flex; align-items: center; gap: 14px; padding: 0 18px">
 <span style="width: 24px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; color: ${r.posColor}">${r.pos}</span>
 <span style="flex: 1; font-weight: 800; color: #FFFFFF">${r.name}</span>
-<span style="font-size: 13px; color: #8C958E">${r.days}</span>
+<span style="font-size: 13px; color: ${r.dayColor}">${r.days}</span>
 <span style="width: 56px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; color: #FFFFFF; font-variant-numeric: tabular-nums">${r.pts}</span>
 </div>
 </div>
@@ -814,11 +808,13 @@ ${v.apkInfo ? html`<span style="font-family: 'JetBrains Mono', monospace; font-s
 </div>
 </section>
 
+</main>
+
 <footer style="border-top: 1px solid #1C211E">
 <div style="max-width: 1320px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8C958E">
 <span>© 2026 Fitness Flow</span>
 <span>${v.t.photos}</span>
-<span>Android · PL / EN</span>
+<span style="display: inline-flex; gap: 20px; flex-wrap: wrap"><a href="prywatnosc.html" style="display: inline-block; padding: 12px 0">${v.t.privacy}</a><a href="mailto:kontakt@4optima.pl" style="display: inline-block; padding: 12px 0">${v.t.contact}</a></span>
 </div>
 </footer>
 
