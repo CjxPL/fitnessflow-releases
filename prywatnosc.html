@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prywatność · Movabit</title>
+<meta name="description" content="Jakie dane zbiera Movabit, gdzie są przechowywane i jak je usunąć. / What data Movabit collects, where it lives and how to delete it.">
+<link rel="canonical" href="https://movabit.com/prywatnosc.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root { --bg: #1E1E25; --card: #2D2D36; --text: #F3F3F3; --text2: #BABABA; --accent: #D5FF5F; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); }
+  body { font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.55; -webkit-font-smoothing: antialiased; padding: max(24px, env(safe-area-inset-top)) 16px max(40px, env(safe-area-inset-bottom)); }
+  main { max-width: 680px; margin: 0 auto; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .back { font-size: 14px; font-weight: 600; text-decoration: none; }
+  h1 { font-size: 30px; line-height: 1.15; margin: 20px 0 6px; letter-spacing: -0.01em; }
+  h2 { font-size: 19px; margin: 30px 0 6px; }
+  p, li { color: var(--text2); font-size: 16px; margin: 0 0 10px; }
+  ul { padding-left: 20px; margin: 0 0 10px; }
+  .meta { font-size: 14px; }
+  .box { background: var(--card); border-radius: 20px; padding: 14px 18px; margin: 14px 0; }
+  hr { border: 0; border-top: 1px solid #3A3A45; margin: 40px 0 10px; }
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="./">← Movabit</a>
+<p class="meta" style="margin-top:14px"><a href="#en">English version below</a></p>
+
+<h1>Prywatność</h1>
+<p class="meta">Ostatnia aktualizacja: 21 listopada 2026. Dotyczy aplikacji Movabit na Androida (z Google Play i z GitHuba) oraz tej strony.</p>
+
+<h2>Kto jest administratorem</h2>
+<p>4optima sp. z o.o., ul. Wydmowa 4, 05-092 Łomianki, KRS 0000544621, NIP 1182105589. Kontakt: <a href="mailto:kontakt@4optima.pl">kontakt@4optima.pl</a>.</p>
+
+<h2>Zostaje w Twoim telefonie</h2>
+<p>Historia treningów, plan, ustawienia, waga, skład ciała, zapisane posiłki i dane odczytane z Health Connect są przechowywane tylko na telefonie. Nie wysyłamy ich na nasz serwer i nikomu ich nie przekazujemy. Kopię danych zapisujesz sam do pliku w Profilu. Przypomnienia, alarmy przerw i widżet działają na telefonie.</p>
+<p>Liczenie powtórzeń kamerą i odczyt wyniku ze zrzutu ekranu działają na telefonie. Obraz nie opuszcza urządzenia i nie jest zapisywany. Wagę Bluetooth aplikacja odczytuje dopiero po dotknięciu „Zważ się teraz”, też tylko na telefonie.</p>
+
+<h2>Health Connect (opcjonalnie)</h2>
+<p>Za Twoją zgodą aplikacja tylko czyta z Health Connect: wagę, tłuszcz i masę beztłuszczową; treningi (sesje, dystans, tętno, aktywne kalorie); kroki; tętno spoczynkowe i zmienność rytmu serca (HRV); oraz starsze dane z historii. Używamy ich wyłącznie po to, żeby w aplikacji pokazać Twój kalendarz, dopasować plan i podpowiedzi o obciążeniu oraz policzyć cel jedzenia. Niczego nie zapisujemy do Health Connect. Dane zostają na telefonie, nie służą do reklam, nie sprzedajemy ich i nie przekazujemy. Korzystanie z danych z Health Connect jest zgodne z zasadami Google Play dotyczącymi danych użytkownika, w tym z wymogami ograniczonego użycia. Zgodę możesz cofnąć w Health Connect w każdej chwili. Bez niej aplikacja nadal działa.</p>
+
+<h2>Drużyna (opcjonalnie)</h2>
+<p>Gdy dołączysz do drużyny, aplikacja zakłada na serwerze konto pseudonimowe. Trafia tam: losowy identyfikator konta, skrót tajnego klucza, Twój pseudonim, punkty i liczba dni z ruchem (bieżący i kilka poprzednich tygodni) oraz kod drużyny. Znajomi z drużyny widzą wyłącznie pseudonim, punkty i dni z ruchem. Na serwerze nie ma wagi, składu ciała ani innych danych zdrowotnych. Serwer działa w usłudze Cloudflare (Workers i baza D1) i jak każdy serwer widzi adres IP w chwili połączenia.</p>
+
+<h2>Posiłki ze zdjęcia lub opisu (opcjonalnie)</h2>
+<p>Ta funkcja działa tylko za Twoją zgodą. Zdjęcie lub opis posiłku jest wysyłane przez nasz serwer do modelu AI (Claude, Anthropic), żeby oszacować kalorie i białko. Razem z nim wysyłamy tylko język aplikacji, nie wysyłamy wagi ani innych Twoich danych. Nie zapisujemy zdjęcia ani opisu. Serwer zapamiętuje jedynie liczbę analiz dziennie, żeby pilnować limitu. Zdjęcie przed wysłaniem jest pomniejszane i pozbawiane danych EXIF, w tym lokalizacji.</p>
+
+<h2>Usługi Google w aplikacji</h2>
+<p>Rozpoznawanie pozy (liczenie kamerą) i tekstu (zrzut wyniku) korzysta z ML Kit od Google i działa na telefonie. Obraz nie jest wysyłany do Google. Według informacji Google ML Kit może wysyłać do Google dane techniczne do diagnostyki: model telefonu, wersję systemu i aplikacji, wydajność oraz losowy identyfikator instalacji.</p>
+<p>Filmy instruktażowe pochodzą z YouTube (Google). Miniatury pobierają się z serwerów YouTube, a po otwarciu filmu odtwarza go YouTube. Widzi wtedy adres IP i dane urządzenia, zgodnie z własną polityką Google. Nie przekazujemy mu żadnych Twoich danych z aplikacji.</p>
+
+<h2>Przechowywanie i usuwanie</h2>
+<p>Dane na telefonie usuniesz, odinstalowując aplikację albo czyszcząc jej dane w ustawieniach Androida. Konto drużyny kasuje przycisk „Usuń moje konto z serwera” w zakładce Drużyna albo <a href="usun-konto.html">ta strona</a>. Znikają wtedy pseudonim, punkty, członkostwo i dostęp do analizy posiłków. Drużyna znika razem z ostatnią osobą. Dane na serwerze trzymamy, dopóki nie usuniesz konta.</p>
+
+<h2>Odbiorcy danych</h2>
+<p>Cloudflare (serwer drużyn), Anthropic (tylko analiza posiłku), Google (ML Kit, YouTube, Google Play) i GitHub (strona i plik instalacyjny z GitHuba). Część z nich może przetwarzać dane poza Europejskim Obszarem Gospodarczym.</p>
+
+<h2>Ta strona i pobieranie</h2>
+<p>Strona jest hostowana w GitHub Pages. Nie używa plików cookie, reklam ani zewnętrznych czcionek. Zapamiętuje w przeglądarce tylko wybrany język. Aplikację pobierzesz z Google Play albo jako plik z GitHub Releases, więc obowiązują tam polityki Google i GitHuba. Wersja z GitHuba sprawdza aktualizacje w GitHubie, wersja z Google Play nie.</p>
+
+<h2>Twoje prawa</h2>
+<p>Możesz żądać dostępu do danych, które o Tobie przechowujemy na serwerze (pseudonim i punkty drużyny), ich poprawienia, usunięcia lub ograniczenia przetwarzania. Napisz na <a href="mailto:kontakt@4optima.pl">kontakt@4optima.pl</a>. Masz też prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.</p>
+
+<hr>
+<div id="en" lang="en">
+<h1>Privacy</h1>
+<p class="meta">Last updated: 21 November 2026. Covers the Movabit Android app (from Google Play and from GitHub) and this website.</p>
+
+<h2>Who is responsible</h2>
+<p>4optima sp. z o.o., ul. Wydmowa 4, 05-092 Łomianki, Poland (KRS 0000544621, NIP 1182105589). Contact: <a href="mailto:kontakt@4optima.pl">kontakt@4optima.pl</a>.</p>
+
+<h2>What stays on your phone</h2>
+<p>Workout history, plan, settings, weight, body composition, saved meals and data read from Health Connect are stored only on your phone. We do not send them to our server and we do not pass them on. You save a backup to a file yourself from Profile. Reminders, rest alarms and the widget run on the phone.</p>
+<p>Camera rep counting and reading a result from a screenshot happen on the phone. The image never leaves the device and is not stored. The app reads a Bluetooth scale only after you tap “Weigh now”, also only on the phone.</p>
+
+<h2>Health Connect (optional)</h2>
+<p>With your permission the app only reads from Health Connect: weight, body fat and lean mass; workouts (sessions, distance, heart rate, active calories); steps; resting heart rate and heart rate variability (HRV); and older history. We use it only to show your calendar, adjust the plan and load hints, and work out your food target. We never write to Health Connect. The data stays on your phone, is not used for ads, and is not sold or passed on. Our use of Health Connect data follows the Google Play User Data policy, including the Limited Use requirements. You can withdraw permission in Health Connect at any time. The app keeps working without it.</p>
+
+<h2>Team (optional)</h2>
+<p>When you join a team, the app creates a pseudonymous account on the server. It holds: a random account ID, a hash of a secret key, your nickname, points and active days (this week and a few earlier weeks) and the team code. Teammates see only the nickname, points and active days. The server has no weight, body composition or other health data. It runs on Cloudflare (Workers and D1) and, like any server, sees your IP address when you connect.</p>
+
+<h2>Meals from a photo or description (optional)</h2>
+<p>This feature works only with your consent. A photo or description of a meal is sent through our server to an AI model (Claude, by Anthropic) to estimate calories and protein. We send only the app language with it, never your weight or other data. We do not store the photo or the description. The server only remembers how many analyses you ran per day to enforce a limit. Before sending, the photo is downscaled and stripped of EXIF data, including location.</p>
+
+<h2>Google services in the app</h2>
+<p>Pose recognition (camera counting) and text recognition (result screenshot) use Google’s ML Kit and run on the phone. The image is not sent to Google. According to Google, ML Kit may send technical data to Google for diagnostics: phone model, system and app version, performance, and a random installation ID.</p>
+<p>Exercise videos come from YouTube (Google). Thumbnails load from YouTube servers, and YouTube plays a video once you open it. It then sees your IP address and device data under Google’s own policy. We pass it none of your data from the app.</p>
+
+<h2>Retention and deletion</h2>
+<p>Delete data on your phone by uninstalling the app or clearing its data in Android settings. Delete your team account with the “Delete my account from the server” button in the Team tab or on <a href="usun-konto.html">this page</a>. That removes your nickname, points, membership and meal-analysis access. A team disappears with its last member. We keep server data until you delete the account.</p>
+
+<h2>Recipients</h2>
+<p>Cloudflare (team server), Anthropic (meal analysis only), Google (ML Kit, YouTube, Google Play) and GitHub (this site and the GitHub installer). Some of them may process data outside the European Economic Area.</p>
+
+<h2>This website and downloads</h2>
+<p>The site is hosted on GitHub Pages. It uses no cookies, ads or external fonts. It remembers only your language choice in the browser. You can get the app from Google Play or as a file from GitHub Releases, where Google’s and GitHub’s own policies apply. The GitHub version checks for updates on GitHub; the Google Play version does not.</p>
+
+<h2>Your rights</h2>
+<p>You can ask for access to the data we keep on our server (nickname and team points), and for correction, deletion or restriction of processing. Write to <a href="mailto:kontakt@4optima.pl">kontakt@4optima.pl</a>. You can also complain to the Polish data protection authority (UODO).</p>
+</div>
+</main>
+</body>
+</html>

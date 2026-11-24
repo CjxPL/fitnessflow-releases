@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /join.html
+Disallow: /plan.html
+Disallow: /usun-konto.html
+Disallow: /logo.html
+
+Sitemap: https://movabit.com/sitemap.xml

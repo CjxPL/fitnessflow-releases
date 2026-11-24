@@ -1,0 +1,56 @@
+# Movabit
+
+> Movabit is a free Android app that helps people build an exercise habit with bodyweight training: one gentle exercise a day to start, then a calisthenics plan with a timer, automatic progression and a team of friends. Made by 4optima (Poland). Tagline: "Move a bit. Every day."
+
+- Website (English): https://movabit.com/
+- Website (Polish): https://movabit.com/pl/
+- Download (Android APK): https://github.com/CjxPL/fitnessflow-releases/releases/latest
+- Privacy policy: https://movabit.com/prywatnosc.html
+- Instagram: https://www.instagram.com/movabit.app/
+- Contact: kontakt@4optima.pl
+
+## Who it is for
+- Complete beginners who can't do a push-up yet ("Start from zero" plan, one exercise a day).
+- People who trained for years and feel stuck (calisthenics progressions to skills like front lever, planche, muscle-up; HYROX race plan).
+
+## Features
+- One gentle exercise a day to build an exercise habit
+- Bodyweight workouts with no equipment
+- “Start from zero” plan for complete beginners
+- Calisthenics plan with progressions to front lever, planche and muscle-up
+- Automatic progression: targets rise when you cope and step back when it is too hard
+- Workout timer with rest breaks
+- Fitness test every 6 weeks
+- HYROX race plan
+- Teams with friends and a weekly ranking
+- Workouts, heart rate and steps from Health Connect
+- Weight and body data stay on the phone
+
+## Platforms and price
+- Android only (APK now, Google Play coming soon). No iPhone version yet.
+- Free, no ads.
+
+## FAQ
+### Do I need any equipment?
+No. Movabit is built on bodyweight training. A floor and a chair are enough to start. If you have a pull-up bar, rings or bands, add them to your plan and the app picks exercises for them.
+
+### I can’t do a single push-up. Is it for me?
+Yes. The “Start from zero” plan begins with exercises you can do right away. Your first goal is one gentle exercise a day, and the reminder comes at the time you choose.
+
+### How much does Movabit cost?
+The app is free. Today’s workout, habit building, your plan, the fitness test and a team with friends come with no fees and no ads.
+
+### Does my data leave my phone?
+Weight, body composition and watch data stay on your phone. Your team sees only your nickname, this week’s points and how many days you trained. You can delete your team account with one tap.
+
+### Does Movabit work with my watch?
+Yes, through Health Connect on Android. The app reads workouts, heart rate and steps from watches and apps that save data to Health Connect, such as Polar, Garmin, Samsung or Google Fit.
+
+### How does progression work?
+When you cope, your target grows by one rep or two seconds. When it’s too hard, the plan steps back on its own. A fitness test every 6 weeks shows your progress, and advanced users get ladders to the front lever, planche and muscle-up.
+
+### Is there a plan for a HYROX race?
+Yes. Enter your race date and level, and the app builds a week-by-week plan and combines it with your calisthenics training.
+
+### Is Movabit available for iPhone?
+Not yet – it’s Android only for now. You download it as an APK file, and it’s coming to Google Play soon.
